@@ -16,9 +16,14 @@ def page_advanced_experiments_body():
     )
 
     # ---- Load Model Comparison Data ----
-    # Example CSV saved from Notebook 6
-    model_comparison_df = pd.read_csv("/workspaces/Heart_disease_risk_predictor/outputs/models/final_results.csv")  
-    # Columns: model_name, accuracy, recall, precision, auc
+    model_comparison_df = pd.read_csv(
+        "/workspaces/Heart_disease_risk_predictor/outputs/models/final_results.csv"
+    )
+    # Normalize column names: lowercase + replace "-" with "_"
+    model_comparison_df.columns = (
+        model_comparison_df.columns.str.lower().str.replace("-", "_")
+    )
+    # Now columns are: model, dataset, accuracy, precision, recall, f1, roc_auc
 
     st.write("#### Model Comparison Summary")
     st.dataframe(model_comparison_df)
@@ -26,10 +31,10 @@ def page_advanced_experiments_body():
     # ---- Highlight Best Pipeline ----
     best_model = model_comparison_df.loc[model_comparison_df['recall'].idxmax()]
     st.success(
-        f"**Best Pipeline Selected:** {best_model['model_name']} \n\n"
+        f"**Best Pipeline Selected:** {best_model['model']} \n\n"
         f"Performance Metrics: Accuracy = {best_model['accuracy']:.2f}, "
         f"Recall = {best_model['recall']:.2f}, Precision = {best_model['precision']:.2f}, "
-        f"AUC = {best_model['auc']:.2f}"
+        f"AUC = {best_model['roc_auc']:.2f}"
     )
 
     st.write("---")
@@ -38,8 +43,11 @@ def page_advanced_experiments_body():
     st.write("#### Comparison of Key Metrics Across Pipelines")
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.barplot(
-        data=model_comparison_df.melt(id_vars='model_name', value_vars=['accuracy', 'recall', 'precision', 'auc']),
-        x='model_name',
+        data=model_comparison_df.melt(
+            id_vars='model',
+            value_vars=['accuracy', 'recall', 'precision', 'f1', 'roc_auc']
+        ),
+        x='model',
         y='value',
         hue='variable',
         palette='viridis'

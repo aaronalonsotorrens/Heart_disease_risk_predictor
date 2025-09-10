@@ -53,14 +53,3 @@ def page_model_training_body():
     RocCurveDisplay.from_estimator(pipeline, X_test, y_test, ax=ax)
     st.pyplot(fig)
 
-    st.write(f"#### Feature Importance: {model_choice}")
-    try:
-        feature_importances = pipeline.named_steps['classifier'].feature_importances_
-        features = X_test.columns
-        importance_df = pd.DataFrame({
-            'Feature': features,
-            'Importance': feature_importances
-        }).sort_values(by='Importance', ascending=False)
-        st.bar_chart(importance_df.set_index('Feature'))
-    except AttributeError:
-        st.warning("Feature importance not available for this model type.")

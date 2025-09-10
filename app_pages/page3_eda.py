@@ -16,7 +16,7 @@ def page_eda_body():
     st.write("### Exploratory Data Analysis")
     st.info(
         "This page provides insights into the dataset features, distributions, "
-        "and their relationships with the target variable (Heart Disease)."
+        "and their relationships with the HeartDisease variable (Heart Disease)."
     )
 
     # Dataset preview
@@ -29,8 +29,8 @@ def page_eda_body():
     # Feature distribution comparison
     st.write("#### Feature Distributions vs Disease Outcome")
 
-    target_var = "target"  # Replace with your target column name
-    features = [col for col in df.columns if col != target_var]
+    HeartDisease_var = "HeartDisease"  # Replace with your HeartDisease column name
+    features = [col for col in df.columns if col != HeartDisease_var]
 
     selected_feature = st.selectbox(
         "Select a feature to visualize against Disease Outcome", features
@@ -39,15 +39,15 @@ def page_eda_body():
     if df[selected_feature].dtype == "object" or df[selected_feature].nunique() < 10:
         # Categorical feature plot
         fig, ax = plt.subplots(figsize=(8, 5))
-        sns.countplot(data=df, x=selected_feature, hue=target_var,
+        sns.countplot(data=df, x=selected_feature, hue=HeartDisease_var,
                       order=df[selected_feature].value_counts().index)
-        plt.title(f"{selected_feature} vs {target_var}")
+        plt.title(f"{selected_feature} vs {HeartDisease_var}")
         st.pyplot(fig)
     else:
         # Numerical feature plot
         fig, ax = plt.subplots(figsize=(8, 5))
-        sns.histplot(data=df, x=selected_feature, hue=target_var, kde=True, element="step")
-        plt.title(f"{selected_feature} vs {target_var}")
+        sns.histplot(data=df, x=selected_feature, hue=HeartDisease_var, kde=True, element="step")
+        plt.title(f"{selected_feature} vs {HeartDisease_var}")
         st.pyplot(fig)
 
     st.write("---")
@@ -72,8 +72,8 @@ def page_eda_body():
             df,
             x=x_axis,
             y=y_axis,
-            color=target_var,
-            title=f"{y_axis} vs {x_axis} colored by {target_var}",
+            color=HeartDisease_var,
+            title=f"{y_axis} vs {x_axis} colored by {HeartDisease_var}",
             height=500
         )
         st.plotly_chart(fig)
