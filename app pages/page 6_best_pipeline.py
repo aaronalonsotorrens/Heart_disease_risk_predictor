@@ -17,7 +17,7 @@ def page_advanced_experiments_body():
 
     # ---- Load Model Comparison Data ----
     # Example CSV saved from Notebook 6
-    model_comparison_df = pd.read_csv("data/model_comparison.csv")  
+    model_comparison_df = pd.read_csv("/workspaces/Heart_disease_risk_predictor/outputs/models/final_results.csv")  
     # Columns: model_name, accuracy, recall, precision, auc
 
     st.write("#### Model Comparison Summary")
