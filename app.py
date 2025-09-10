@@ -1,4 +1,11 @@
 import streamlit as st
+
+# Must be first Streamlit command
+st.set_page_config(
+    page_title="Heart Disease Prediction Dashboard",
+    page_icon="🖥️"
+)
+
 from app_pages.multipage import MultiPage
 
 # Import your page modules
@@ -9,7 +16,6 @@ from app_pages.page4_model_training import page_model_training_body
 from app_pages.page5_ablation_study import page_ablation_study_body
 from app_pages.page6_advanced_pipeline import page_advanced_experiments_body
 from app_pages.page7_inference import page_inference_tool_body
-
 
 import pandas as pd
 

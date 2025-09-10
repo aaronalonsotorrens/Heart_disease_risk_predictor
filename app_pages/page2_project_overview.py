@@ -20,13 +20,13 @@ def page_project_overview_body(data):
     st.write(
         "The dataset was sourced from the UCI Heart Disease dataset (via Kaggle). "
         "It contains clinical and demographic information for patients, "
-        "with a target variable indicating presence (1) or absence (0) of heart disease."
+        "with a HeartDisease variable indicating presence (1) or absence (0) of heart disease."
     )
 
     # Key dataset metrics
     num_patients = data.shape[0]
-    num_features = data.shape[1] - 1  # excluding target
-    disease_rate = (data['target'].mean() * 100).round(1)
+    num_features = data.shape[1] - 1  # excluding HeartDisease
+    disease_rate = (data['HeartDisease'].mean() * 100).round(1)
 
     st.metric("Total Patients", num_patients)
     st.metric("Features", num_features)
