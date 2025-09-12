@@ -8,6 +8,28 @@ def load_pipeline(path: str):
     """
     return joblib.load(path)
 
+def preprocess_input(df: pd.DataFrame, pipeline) -> pd.DataFrame:
+    """Create engineered features and align input columns with pipeline."""
+    df = df.copy()
+    
+    # Example engineered features
+    df["thalch"] = df["thalach"]
+    df["chol_age_ratio"] = df["chol"] / df["age"]
+    df["oldpeak_thalach_ratio"] = df["oldpeak"] / df["thalach"]
+    df["age_trestbps"] = df["age"] * df["trestbps"]
+    df["thalch_oldpeak"] = df["thalach"] * df["oldpeak"]
+    df["age_group"] = pd.cut(df["age"], bins=[0,30,40,50,60,70,80,120], labels=False)
+    
+    # Ensure all columns expected by the pipeline exist
+    pipeline_features = pipeline.feature_names_in_
+    for col in pipeline_features:
+        if col not in df.columns:
+            df[col] = 0  # placeholder for missing columns
+    
+    # Keep only the columns pipeline expects
+    df = df[pipeline_features]
+    return df
+
 
 def enhanced_predict(pipeline, df: pd.DataFrame):
     """
