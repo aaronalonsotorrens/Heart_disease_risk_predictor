@@ -1,40 +1,76 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-def page_project_overview_body(data):
+# Set Seaborn style
+sns.set_style("whitegrid")
 
-    st.title("Project Overview")
+def page_project_overview_body(data: pd.DataFrame):
+    st.title("📊 Project Overview & Dataset Insights")
 
-    # Project background
-    st.markdown("### 📌 Background")
-    st.write(
-        "Cardiovascular disease is one of the leading causes of death worldwide. "
-        "Early detection and risk prediction can help healthcare providers take "
-        "preventive action and guide treatment. "
-        "This project uses machine learning techniques to analyse patient data "
-        "and predict the likelihood of heart disease."
+    # ---- Why: Problem Context ----
+    st.markdown("### Why this matters")
+    st.info(
+        "Cardiovascular disease is the **leading cause of death worldwide**. "
+        "Early detection of high-risk patients can save lives, reduce hospitalizations, "
+        "and lower healthcare costs. "
+        "This project aims to leverage patient clinical and lifestyle data to identify patients at risk of heart disease."
     )
 
-    # Dataset summary
-    st.markdown("### 📊 Dataset Summary")
-    st.write(
-        "The dataset was sourced from the UCI Heart Disease dataset (via Kaggle). "
-        "It contains clinical and demographic information for patients, "
-        "with a HeartDisease variable indicating presence (1) or absence (0) of heart disease."
-    )
-
-    # Key dataset metrics
+    # ---- So What: Dataset Summary & Insights ----
+    st.markdown("### Dataset Summary & Insights")
+    
+    # Key metrics
     num_patients = data.shape[0]
-    num_features = data.shape[1] - 1  # excluding HeartDisease
+    num_features = data.shape[1] - 1  # Exclude target
     disease_rate = (data['HeartDisease'].mean() * 100).round(1)
 
-    st.metric("Total Patients", num_patients)
-    st.metric("Features", num_features)
-    st.metric("Heart Disease Rate", f"{disease_rate}%")
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Total Patients", num_patients)
+    col2.metric("Number of Features", num_features)
+    col3.metric("Heart Disease Rate", f"{disease_rate}%")
+
+    # Key observations
+    st.write(
+        "* Most patients are aged 50–65.\n"
+        "* High cholesterol and elevated blood pressure appear more frequently in patients with heart disease.\n"
+        "* Early patterns in this dataset can guide predictive modeling and risk stratification."
+    )
 
     # Dataset preview
-    st.markdown("#### 🗂️ Sample Data")
+    st.markdown("#### Sample Data")
     st.dataframe(data.head(10))
+
+    # Optional visual: top categorical features vs HeartDisease
+    st.markdown("#### Feature Overview vs Disease Outcome")
+    categorical_features = [col for col in data.columns if data[col].dtype == "object" or data[col].nunique() < 10]
+    
+    if categorical_features:
+        selected_feature = st.selectbox(
+            "Select a feature to visualize",
+            options=categorical_features
+        )
+        fig, ax = plt.subplots(figsize=(8, 4))
+        sns.countplot(
+            data=data,
+            x=selected_feature,
+            hue='HeartDisease',
+            order=data[selected_feature].value_counts().index,
+            palette="viridis"
+        )
+        plt.title(f"{selected_feature} distribution by Heart Disease")
+        st.pyplot(fig)
+    
+    # ---- Now What: How this page guides decisions ----
+    st.markdown("### How to use this page")
+    st.info(
+        "* Understand the dataset structure and key metrics.\n"
+        "* Observe patterns in high-risk vs low-risk patients.\n"
+        "* Prepare for deeper analysis in the Exploratory Data Analysis page.\n"
+        "* Get context for model training and later patient risk predictions."
+    )
+
 
     # Glossary of terms
     st.markdown("### 📖 Key Medical Terms")
