@@ -18,8 +18,6 @@ def load_data(path: str):
 data_path = "/workspaces/Heart_disease_risk_predictor/outputs/datasets/cleaned/heart_disease_cleaned.csv"
 data = load_data(data_path)
 
-# Load raw dataset
-raw_data = pd.read_csv("/workspaces/Heart_disease_risk_predictor/inputs/datasets/raw/heart_disease_uci.csv")
 
 # IMPORT PAGE FUNCTIONS
 
@@ -36,9 +34,9 @@ from app_pages.page7_inference import page_inference_tool_body
 app = MultiPage("Heart Disease Prediction Dashboard")
 
 # Add pages in logical order
-app.add_page("Summary", lambda: page_summary_body(data))  # first landing page
+app.add_page("Summary", lambda: page_summary_body(data))
 app.add_page("Project Overview", lambda: page_project_overview_body(data))
-app.add_page("Exploratory Data Analysis", lambda: page_eda_body(raw_data)) 
+app.add_page("Exploratory Data Analysis", lambda: page_eda_body(data))
 app.add_page("Model Training", page_model_training_body)
 app.add_page("Ablation Study", page_ablation_study_body)
 app.add_page("Advanced Experiments", page_advanced_experiments_body)

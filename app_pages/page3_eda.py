@@ -6,113 +6,112 @@ import plotly.express as px
 
 sns.set_style("whitegrid")
 
-# ---- Load dataset ----
-@st.cache_data
-def load_raw_data():
-    df = pd.read_csv("/workspaces/Heart_disease_risk_predictor/inputs/datasets/raw/heart_disease_uci.csv")
-    return df
-
-raw_data = load_raw_data()
-
-def page_eda_body(raw_data: pd.DataFrame):
+def page_eda_body(data: pd.DataFrame):
     """
-    Exploratory Data Analysis (EDA) page using raw heart disease dataset.
+    Exploratory Data Analysis (EDA) page.
+    Accepts a DataFrame 'data' with a 'HeartDisease' column.
     """
-    df = raw_data.copy()
 
-    # Identify target column
-    if "num" in df.columns:
-        HeartDisease_var = "num"  # raw dataset target
-        df[HeartDisease_var] = df[HeartDisease_var].astype(str)  # for plotting
-    else:
-        st.error("Target column 'num' not found in raw dataset!")
-        return
+    HeartDisease_var = "HeartDisease"
 
-    features = [col for col in df.columns if col != HeartDisease_var]
+    # Identify numeric and categorical features
+    numeric_features = data.select_dtypes(include="number").columns.tolist()
+    if HeartDisease_var in numeric_features:
+        numeric_features.remove(HeartDisease_var)
+    categorical_features = [col for col in data.columns if col not in numeric_features + [HeartDisease_var]]
 
-    # Page title and purpose
-    st.title("Exploratory Data Analysis (EDA)")
+    # ---- Page Title ----
+    st.title("📊 Exploratory Data Analysis (EDA)")
     st.info(
-        "EDA helps us understand the dataset, identify key risk factors for heart disease, "
-        "and detect patterns that will guide modeling and patient risk prediction."
+        "EDA helps us understand patterns in the dataset, identify key risk factors, "
+        "and guide predictive modeling for patient heart disease risk."
     )
 
-    # ---- Dataset preview ----
-    with st.expander("Preview Dataset"):
-        st.write(f"The dataset contains **{df.shape[0]} patients** and **{df.shape[1]-1} features** (excluding target).")
-        st.dataframe(df.head(10))
-
-    # ---- Feature distribution analysis ----
-    st.write("#### Feature Distributions vs Heart Disease Outcome")
-    selected_feature = st.selectbox("Select a feature to explore:", features)
+    # ---- Feature Distribution ----
+    st.write("### 1️⃣ Feature Distributions vs Heart Disease Outcome")
+    selected_feature = st.selectbox("Select a feature to explore:", numeric_features + categorical_features)
     st.write(f"Analyzing **{selected_feature}** and its relationship with heart disease:")
 
-    if df[selected_feature].dtype == "object" or df[selected_feature].nunique() < 10:
-        # Categorical → countplot
+    # Visualization based on type
+    if selected_feature in categorical_features or data[selected_feature].nunique() < 10:
         fig, ax = plt.subplots(figsize=(8, 5))
         sns.countplot(
-            data=df,
+            data=data,
             x=selected_feature,
             hue=HeartDisease_var,
-            order=df[selected_feature].value_counts().index
+            order=data[selected_feature].value_counts().index
         )
-        plt.title(f"{selected_feature} vs Heart Disease")
-        st.pyplot(fig)
+        plt.title(f"{selected_feature} vs {HeartDisease_var}")
     else:
-        # Numerical → histogram + KDE
         fig, ax = plt.subplots(figsize=(8, 5))
         sns.histplot(
-            data=df,
+            data=data,
             x=selected_feature,
             hue=HeartDisease_var,
             kde=True,
             element="step"
         )
-        plt.title(f"{selected_feature} vs Heart Disease")
-        st.pyplot(fig)
+        plt.title(f"{selected_feature} distribution by Heart Disease outcome")
 
-        # Add correlation warning for numerical features
-        corr_value = df[selected_feature].astype(float).corr(pd.to_numeric(df[HeartDisease_var]))
+    st.pyplot(fig)
+
+    # ---- Interpretation ----
+    if selected_feature in numeric_features:
+        corr_value = data[selected_feature].corr(data[HeartDisease_var])
+        strength = "weak" if abs(corr_value)<0.2 else "moderate" if abs(corr_value)<0.5 else "strong"
         st.info(
-            f"Observation: **{selected_feature}** has a linear correlation of **{corr_value:.2f}** with heart disease. "
-            "⚠️ Note: Linear correlation may underestimate importance if the relationship is non-linear or threshold-based."
+            f"Observation: **{selected_feature}** has a correlation of **{corr_value:.2f}** ({strength}) "
+            f"with Heart Disease. This means higher values of {selected_feature} are "
+            f"{'associated with higher risk' if corr_value>0 else 'associated with lower risk'}."
+        )
+    else:
+        st.info(
+            f"Observation: Categories in **{selected_feature}** show different disease prevalence. "
+            f"Focus on categories with higher incidence for potential risk signals."
         )
 
     st.write("---")
 
-    # ---- Correlation heatmap (top features only) ----
-    if st.checkbox("Show Correlation Heatmap (Top Features)"):
-        st.write(
-            "Correlation heatmap shows linear relationships between features and the target. "
-            "We focus on top features to highlight key predictors."
-        )
-        corr = df.corr()
-        # Select top 5 features most correlated with target
-        top_features = corr[HeartDisease_var].abs().sort_values(ascending=False).index[1:6].tolist()
+    # ---- Correlation Heatmap (Top Features) ----
+    st.write("### 2️⃣ Correlation Heatmap: Top Features")
+    top_features = ["age", "chol", "trestbps", "exang"]  # select meaningful columns from cleaned data
+    available_features = [f for f in top_features if f in data.columns]
+    corr = data[available_features + [HeartDisease_var]].corr()
+
+    if st.checkbox("Show Correlation Heatmap"):
         fig, ax = plt.subplots(figsize=(8, 6))
-        sns.heatmap(df[top_features + [HeartDisease_var]].corr(), annot=True, fmt=".2f", cmap="coolwarm", square=True, ax=ax)
+        sns.heatmap(corr, annot=True, fmt=".2f", cmap="coolwarm", square=True, ax=ax)
         st.pyplot(fig)
-        st.info(f"Top features shown: {', '.join(top_features)}")
+        st.info(
+            "These features were selected based on prior feature distribution analysis. "
+            "Strong correlations (positive or negative) with Heart Disease indicate key predictors used in modeling."
+        )
 
     st.write("---")
 
-    # ---- Interactive scatter plot ----
-    if st.checkbox("Interactive Scatter Plot"):
-        numeric_features = df.select_dtypes(include="number").columns.tolist()
+    # ---- Interactive Exploration ----
+    st.write("### 3️⃣ Interactive Feature Exploration")
+    if st.checkbox("Enable Interactive Plot"):
         x_axis = st.selectbox("X-axis", numeric_features, index=0)
         y_axis = st.selectbox("Y-axis", numeric_features, index=1)
+        
         fig = px.scatter(
-            df,
+            data,
             x=x_axis,
             y=y_axis,
             color=HeartDisease_var,
-            title=f"{y_axis} vs {x_axis} colored by Heart Disease",
+            title=f"{y_axis} vs {x_axis} colored by {HeartDisease_var}",
             height=500
         )
         st.plotly_chart(fig)
-        st.info("Explore combinations of features to identify patterns related to heart disease.")
+        st.info(
+            "Interactive exploration: observe how two numeric features jointly relate to disease outcomes. "
+            "Try exploring top risk factors such as Age, Cholesterol, and Maximum Heart Rate."
+        )
 
+    # ---- Takeaway ----
     st.success(
         "EDA Takeaway: Focus on variables with strong associations to heart disease. "
-        "These insights inform model selection, feature engineering, and patient risk assessment."
+        "Feature distributions, correlations, and interactive exploration together inform model selection, "
+        "feature engineering, and patient risk assessment."
     )
