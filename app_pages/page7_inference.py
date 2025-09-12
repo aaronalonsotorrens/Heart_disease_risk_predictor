@@ -1,19 +1,27 @@
 import streamlit as st
 import pandas as pd
-from src.model_utils import enhanced_predict, load_pipeline  # assuming you have these helper functions
+from src.model_utils import enhanced_predict, load_pipeline
 
 # Load the best trained pipeline
-pipeline_best = load_pipeline("/workspaces/Heart_disease_risk_predictor/outputs/models/deployment/best_model_pipeline.pkl")
+pipeline_best = load_pipeline(
+    "/workspaces/Heart_disease_risk_predictor/outputs/models/deployment/best_model_pipeline.pkl"
+)
 
 def page_inference_tool_body():
-
     st.write("### 🩺 Patient Risk Prediction Tool")
+
     st.info(
         "Input patient clinical data to predict heart disease risk using the best trained model. "
         "The tool returns predicted class, probability, risk band, recommendations, and top contributing features."
     )
 
-    st.markdown("#### ⚙️ Enter Patient Data")
+    st.subheader("Why: Early Risk Detection Matters")
+    st.write(
+        "Identifying high-risk patients allows timely preventive measures and intervention. "
+        "This can reduce hospitalizations and improve patient outcomes."
+    )
+
+    st.subheader("Input Patient Data")
 
     # ---- Input widgets for patient data ----
     age = st.number_input("Age", min_value=0, max_value=120, value=55)
@@ -32,19 +40,9 @@ def page_inference_tool_body():
 
     # ---- Convert inputs to DataFrame ----
     patient_data = pd.DataFrame([{
-        "age": age,
-        "sex": sex,
-        "cp": cp,
-        "trestbps": trestbps,
-        "chol": chol,
-        "fbs": fbs,
-        "restecg": restecg,
-        "thalach": thalach,
-        "exang": exang,
-        "oldpeak": oldpeak,
-        "slope": slope,
-        "ca": ca,
-        "thal": thal
+        "age": age, "sex": sex, "cp": cp, "trestbps": trestbps, "chol": chol,
+        "fbs": fbs, "restecg": restecg, "thalach": thalach, "exang": exang,
+        "oldpeak": oldpeak, "slope": slope, "ca": ca, "thal": thal
     }])
 
     # ---- Predefined sample patients ----
@@ -73,6 +71,6 @@ def page_inference_tool_body():
         st.write(f"**Risk Band:** {result['Risk Band']}")
         st.write(f"**Recommendation:** {result['Recommendation']}")
 
-        if "Top Contributions" in result:
+        if "Top Contributions" in result and result["Top Contributions"] is not None:
             st.markdown("**Top Contributing Features:**")
             st.table(result["Top Contributions"])

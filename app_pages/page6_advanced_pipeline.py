@@ -3,14 +3,13 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Set Seaborn style
 sns.set_style("whitegrid")
 
 def page_advanced_experiments_body():
     st.write("### Advanced Experiments & Best Pipeline Selection")
 
     st.info(
-        "This page presents the advanced experiments conducted for model optimization, "
+        "This page presents advanced experiments conducted for model optimization, "
         "including hyperparameter tuning, ensemble methods, and pipeline comparison. "
         "We highlight the best performing pipeline chosen for deployment."
     )
@@ -19,28 +18,36 @@ def page_advanced_experiments_body():
     model_comparison_df = pd.read_csv(
         "/workspaces/Heart_disease_risk_predictor/outputs/models/final_results.csv"
     )
-    # Normalize column names: lowercase + replace "-" with "_"
-    model_comparison_df.columns = (
-        model_comparison_df.columns.str.lower().str.replace("-", "_")
-    )
-    # Now columns are: model, dataset, accuracy, precision, recall, f1, roc_auc
+    model_comparison_df.columns = model_comparison_df.columns.str.lower().str.replace("-", "_")
 
-    st.write("#### Model Comparison Summary")
+    # Why → So What → Now What storytelling
+    st.subheader("Why: Model Selection Matters")
+    st.write(
+        "Different pipelines produce varying predictive performance. "
+        "Selecting the best pipeline ensures high recall for detecting patients at risk, "
+        "reducing the likelihood of missed diagnoses."
+    )
+
+    st.subheader("So What: Comparative Performance Metrics")
     st.dataframe(model_comparison_df)
 
-    # ---- Highlight Best Pipeline ----
     best_model = model_comparison_df.loc[model_comparison_df['recall'].idxmax()]
     st.success(
-        f"**Best Pipeline Selected:** {best_model['model']} \n\n"
+        f"**Best Pipeline Selected:** {best_model['model']}\n\n"
         f"Performance Metrics: Accuracy = {best_model['accuracy']:.2f}, "
         f"Recall = {best_model['recall']:.2f}, Precision = {best_model['precision']:.2f}, "
         f"AUC = {best_model['roc_auc']:.2f}"
     )
 
-    st.write("---")
+    st.subheader("Now What: Actionable Insights")
+    st.write(
+        "This pipeline is ready to predict heart disease risk for new patients. "
+        "It balances recall and precision, ensuring high-risk patients are flagged while "
+        "minimizing false positives."
+    )
 
-    # ---- Visualize Metrics per Model ----
-    st.write("#### Comparison of Key Metrics Across Pipelines")
+    # Visualize Metrics Across Pipelines
+    st.write("#### Model Performance Comparison Across Pipelines")
     fig, ax = plt.subplots(figsize=(10, 6))
     sns.barplot(
         data=model_comparison_df.melt(
@@ -57,13 +64,8 @@ def page_advanced_experiments_body():
     plt.title("Model Performance Comparison")
     st.pyplot(fig)
 
-    st.write(
-        "* The bar chart above shows the performance of each model across multiple metrics. "
-        "The selected best pipeline maximizes recall while maintaining good precision and AUC."
-    )
-
-    # ---- Optional: Display Pipeline Steps ----
-    st.write("#### Chosen Pipeline Steps")
+    # Optional: Display Pipeline Steps
+    st.subheader("Pipeline Steps")
     st.text(
         "Example pipeline steps:\n"
         "1. Data preprocessing: imputation + scaling\n"
@@ -73,5 +75,5 @@ def page_advanced_experiments_body():
         "5. Final fit on full training data"
     )
     st.info(
-        "This final pipeline is ready for deployment in the inference tool."
+        "This final pipeline is now ready for deployment in the inference tool to predict patient risk."
     )
