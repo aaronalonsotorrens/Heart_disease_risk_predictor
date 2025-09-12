@@ -26,6 +26,7 @@ data = pd.read_csv("/workspaces/Heart_disease_risk_predictor/outputs/datasets/cl
 app = MultiPage("Heart Disease Prediction Dashboard")
 
 # Add pages
+app.add_page("Summary", page_summary_body)
 app.add_page("Project Overview", lambda: page_project_overview_body(data))
 app.add_page("Exploratory Data Analysis", page_eda_body)
 app.add_page("Model Training", page_model_training_body)
