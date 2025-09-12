@@ -2,7 +2,7 @@
 
 ## Dataset Content
 
-The dataset is sourced from the [UCI Heart Disease Dataset](https://archive.ics.uci.edu/ml/datasets/Heart+Disease).  
+The dataset is sourced from the [UCI Heart Disease Dataset](https://www.kaggle.com/datasets/redwankarimsony/heart-disease-data).  
 We created a fictitious scenario where a medical analytics company wants to predict heart disease risk for patients.  
 
 Each row represents a patient, and each column contains a patient attribute, including:
@@ -61,17 +61,19 @@ The client has a dataset with patient health attributes and wants the following:
 
 This segment sets the context, dataset understanding, and project framing.
 
-# Heart Disease Risk Prediction Project — README (Segment 2)
+# Heart Disease Risk Prediction Project
 
 ## Mapping Business Requirements to ML Tasks
 
 **Business Requirement 1:** Understand patterns in patient data and identify features correlated with heart disease.  
 **Approach:**
+
 - Data visualization (histograms, boxplots, bar charts) to explore patient attributes.
 - Correlation analysis (Pearson and Spearman) to identify features most related to heart disease.
 
 **Business Requirement 2:** Predict heart disease for a prospect patient and identify patient clusters.  
 **Approach:**
+
 - Classification model: Predict presence or absence of heart disease (binary classification).
 - Clustering model: Identify patient subgroups with similar health profiles.
 - Regression (optional): Predict a continuous risk score if required (probability of heart disease).
@@ -81,6 +83,7 @@ This segment sets the context, dataset understanding, and project framing.
 ## ML Business Case
 
 ### 1. Predict Heart Disease — Classification Model
+
 - **Goal:** Predict whether a patient has heart disease (`target = 1`) using patient attributes.
 - **Input features:** All attributes except `target` and any patient identifier.
 - **Output:** Binary flag (0 = No disease, 1 = Disease) with probability.
@@ -90,12 +93,14 @@ This segment sets the context, dataset understanding, and project framing.
 - **Training data:** Filtered patient records (~300–500 rows).
 
 ### 2. Predict Risk Score — Regression Pipeline (Optional)
+
 - **Goal:** Predict a continuous risk score for heart disease.
 - **Models tested:** Linear Regression, Random Forest Regressor.
 - **Metrics:** R² ≥ 0.7 on train/test sets.
 - **Note:** Optional; primary focus is classification.
 
 ### 3. Cluster Analysis Pipeline
+
 - **Goal:** Group patients with similar health profiles.
 - **Model type:** KMeans clustering.
 - **Metrics:** Silhouette score ≥ 0.45; fewer than 15 clusters for interpretability.
@@ -105,39 +110,46 @@ This segment sets the context, dataset understanding, and project framing.
 
 ## Notebooks Overview
 
-**Notebook 1 — Data Inspection & Cleaning**
+**Notebook 1 — Data Inspection & Cleaning
+
 - Load dataset, check types, missing values, and outliers.
 - Encode categorical variables, scale numerical features.
 - Output: Cleaned dataset ready for analysis.
 
-**Notebook 2 — Exploratory Data Analysis (EDA)**
+**Notebook 2 — Exploratory Data Analysis (EDA)
+
 - Visualize distributions (age, cholesterol, blood pressure, chest pain type).
 - Correlation and univariate analysis.
 - Output: Insights into key risk factors.
 
-**Notebook 3 — Feature Engineering & Preprocessing**
+**Notebook 3 — Feature Engineering & Preprocessing
+
 - Transform variables, one-hot encode categorical features.
 - Split data into training, validation, and test sets.
 - Output: Preprocessed dataset and train/test splits.
 
-**Notebook 4 — Heart Disease Classification Pipeline**
+**Notebook 4 — Heart Disease Classification Pipeline
+
 - Build and train classification models: Logistic Regression, Random Forest, XGBoost.
 - Evaluate with Recall, Precision, F1-score, ROC-AUC.
 - Analyze feature importance.
 - Output: Trained classifier and evaluation report.
 
-**Notebook 5 — Predict Risk Score (Optional Regression)**
+**Notebook 5 — Predict Risk Score (Optional Regression)
+
 - Build regression model for continuous risk score.
 - Evaluate using R², RMSE, MAE.
 - Output: Trained regressor and evaluation report.
 
-**Notebook 6 — Final Evaluation & Deployment Prep**
+**Notebook 6 — Final Evaluation & Deployment Prep
+
 - Evaluate tuned models on test set.
 - Visualize feature importance for tree-based models.
 - Save final pipelines for deployment.
 - Optional: Cluster analysis.
 
-**Notebook 7 — Dashboard Integration (Streamlit)**
+**Notebook 7 — Dashboard Integration (Streamlit)
+
 - Combine all analysis and ML predictions into interactive dashboard.
 - Pages for dataset overview, predictive analysis, feature importance, risk scores, and clusters.
 
@@ -145,27 +157,34 @@ This segment sets the context, dataset understanding, and project framing.
 
 ## Dashboard Design (Streamlit)
 
-**Page 1: Quick Project Summary**
+**Page 1: Quick Project Summary
+
 - Project overview, dataset details, business requirements, terminology.
 
-**Page 2: Patient Data Analysis**
+**Page 2: Patient Data Analysis
+
 - Interactive dataset preview, correlation heatmaps, variable distributions.
 
-**Page 3: Heart Disease Prediction**
+**Page 3: Heart Disease Prediction
+
 - Form for prospect patient inputs.
 - Output: Prediction, probability, optional risk score, cluster assignment.
 
-**Page 4: Hypothesis Validation**
+**Page 4: Hypothesis Validation
+
 - Summarize and validate hypotheses from EDA and ML.
 
-**Page 5: Classification Results**
+**Page 5: Classification Results
+
 - Display confusion matrix, ROC curve, feature importance.
 
-**Page 6: Risk Score Prediction (Optional)**
+**Page 6: Risk Score Prediction (Optional)
+
 - Show regression outputs if implemented.
 - Evaluate R², RMSE, MAE.
 
-**Page 7: Clustering Results**
+**Page 7: Clustering Results
+
 - Visualize clusters (PCA or scatter plots).
 - Cluster distribution across disease status.
 - Patient subgroup profiles.
@@ -237,15 +256,18 @@ The Streamlit app provides a user-friendly way to explore data and generate pred
 ---
 
 ### Page 1: Quick Project Summary
+
 - Explains project goals, dataset details, and business requirements.
 - Defines project-specific jargon.
 
 ### Page 2: Patient Data Analysis
+
 - Interactive dataset preview.
 - Visualizations of distributions and correlations.
 - Insights into key risk factors.
 
 ### Page 3: Heart Disease Prediction
+
 - Form inputs: Age, Sex, Chest Pain Type, BP, Cholesterol, Max HR, etc.
 - **Predict button**: runs classification pipeline.
 - **Outputs**:
@@ -255,10 +277,12 @@ The Streamlit app provides a user-friendly way to explore data and generate pred
   - Assigned cluster.
 
 ### Page 4: Hypothesis Validation
+
 - Lists hypotheses from EDA.
 - Shows whether validated (e.g., ✅ "older patients have higher risk").
 
 ### Page 5: Classification Results
+
 - Summarizes model performance.
 - Displays:
   - Confusion matrix.
@@ -267,11 +291,13 @@ The Streamlit app provides a user-friendly way to explore data and generate pred
 - Lists top predictive features.
 
 ### Page 6: Risk Score Prediction (Optional)
+
 - Regression results with plots:
   - Predicted vs actual risk score.
 - Error metrics (R², RMSE, MAE).
 
 ### Page 7: Cluster Analysis
+
 - Shows scatterplots of clusters (PCA reduced).
 - Displays cluster distribution across disease status.
 - Provides subgroup profiles.
@@ -281,10 +307,13 @@ The Streamlit app provides a user-friendly way to explore data and generate pred
 ## Deployment & Usage
 
 ### Local Setup
+
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/YOUR-USERNAME/heart-disease-risk-prediction.git
    cd heart-disease-risk-prediction
+
 Install dependencies:
 
 bash
@@ -377,11 +406,15 @@ streamlit run app.py
 
 ### References
 
-- UCI Machine Learning Repository: Heart Disease Dataset
-  - https://archive.ics.uci.edu/ml/datasets/Heart+Disease
-- Scikit-learn documentation: https://scikit-learn.org/stable/documentation.html
-- SHAP Explainability: https://github.com/slundberg/shap
-- Streamlit Documentation: https://docs.streamlit.io/
+UCI Machine Learning Repository: Heart Disease Dataset
+  
+<https://archive.ics.uci.edu/ml/datasets/Heart+Disease>
+
+Scikit-learn documentation: <https://scikit-learn.org/stable/documentation.html>
+
+SHAP Explainability: <https://github.com/slundberg/shap>
+
+Streamlit Documentation: <https://docs.streamlit.io/>
 
 ### Dataset License
 

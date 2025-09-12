@@ -29,6 +29,13 @@ def page_eda_body(data: pd.DataFrame):
 
     # ---- Feature Distribution ----
     st.write("### 1️⃣ Feature Distributions vs Heart Disease Outcome")
+    st.write(
+        "These plots show how each feature (e.g., Age, Cholesterol, Chest Pain Type) is distributed "
+        "for patients with and without heart disease. \n\n"
+        "👉 This helps detect **risk factors** (features that look different across groups), "
+        "and also reveals **imbalances** in categories or ranges."
+    )
+
     selected_feature = st.selectbox("Select a feature to explore:", numeric_features + categorical_features)
     st.write(f"Analyzing **{selected_feature}** and its relationship with heart disease:")
 
@@ -64,6 +71,10 @@ def page_eda_body(data: pd.DataFrame):
             f"with Heart Disease. This means higher values of {selected_feature} are "
             f"{'associated with higher risk' if corr_value>0 else 'associated with lower risk'}."
         )
+        st.warning(
+            "⚠️ Note: Linear correlation may underestimate importance for non-linear or threshold effects "
+            "(e.g., Age > 50). Binary targets can also dilute correlation values."
+        )
     else:
         st.info(
             f"Observation: Categories in **{selected_feature}** show different disease prevalence. "
@@ -74,6 +85,15 @@ def page_eda_body(data: pd.DataFrame):
 
     # ---- Correlation Heatmap (Top Features) ----
     st.write("### 2️⃣ Correlation Heatmap: Top Features")
+    st.write(
+        "The heatmap highlights **linear relationships** between numeric features and Heart Disease. "
+        "Strong correlations (positive or negative) suggest these features could be important predictors."
+    )
+    st.write(
+        "👉 Example: High resting blood pressure (trestbps) or cholesterol (chol) levels may correlate with higher risk. "
+        "But remember: correlation does **not** always imply causation."
+    )
+
     top_features = ["age", "chol", "trestbps", "exang"]  # select meaningful columns from cleaned data
     available_features = [f for f in top_features if f in data.columns]
     corr = data[available_features + [HeartDisease_var]].corr()
@@ -83,14 +103,21 @@ def page_eda_body(data: pd.DataFrame):
         sns.heatmap(corr, annot=True, fmt=".2f", cmap="coolwarm", square=True, ax=ax)
         st.pyplot(fig)
         st.info(
-            "These features were selected based on prior feature distribution analysis. "
-            "Strong correlations (positive or negative) with Heart Disease indicate key predictors used in modeling."
+            "These correlations help us **rank features** for model training. "
+            "For example, highly correlated features are strong candidates for inclusion, "
+            "while redundant features may be dropped to avoid overfitting."
         )
 
     st.write("---")
 
     # ---- Interactive Exploration ----
     st.write("### 3️⃣ Interactive Feature Exploration")
+    st.write(
+        "Scatterplots allow us to **compare two numeric features together** and see how they interact. "
+        "By coloring points by Heart Disease outcome, we can spot patterns that single-feature plots may miss. \n\n"
+        "👉 Example: Patients with **high cholesterol and high blood pressure** might cluster into the higher-risk group."
+    )
+
     if st.checkbox("Enable Interactive Plot"):
         x_axis = st.selectbox("X-axis", numeric_features, index=0)
         y_axis = st.selectbox("Y-axis", numeric_features, index=1)
@@ -105,13 +132,18 @@ def page_eda_body(data: pd.DataFrame):
         )
         st.plotly_chart(fig)
         st.info(
-            "Interactive exploration: observe how two numeric features jointly relate to disease outcomes. "
-            "Try exploring top risk factors such as Age, Cholesterol, and Maximum Heart Rate."
+            "Interactive exploration is especially useful for detecting **feature interactions**, "
+            "which linear correlations alone might miss."
         )
 
     # ---- Takeaway ----
     st.success(
-        "EDA Takeaway: Focus on variables with strong associations to heart disease. "
-        "Feature distributions, correlations, and interactive exploration together inform model selection, "
-        "feature engineering, and patient risk assessment."
+        "### 🧾 EDA Takeaways\n"
+        "- **Feature Distributions** reveal which variables differ most between patients with and without heart disease. "
+        "This helps identify candidate risk factors.\n"
+        "- **Correlation Analysis** highlights linear relationships and helps us prioritize features for training.\n"
+        "- **Interactive Exploration** uncovers interactions between features that may be more predictive together than alone.\n\n"
+        "➡️ These insights guide **feature engineering**, **model selection**, and ultimately improve the predictive power of our models. "
+        "For example, strong predictors (like chest pain type or exercise-induced angina) will be emphasized in training, "
+        "while weak or redundant variables may be dropped."
     )

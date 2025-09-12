@@ -48,7 +48,7 @@ def page_summary_body(data: pd.DataFrame):
     # ---- Link to Full Documentation ----
     st.markdown(
         "*For additional information, please visit and read the "
-        "[Project README file](https://github.com/your-username/your-heart-disease-repo).*"
+        "[Project README file](https://github.com/aaronalonsotorrens/Heart_disease_risk_predictor).*"
     )
 
     # Optional: Show a small table preview
