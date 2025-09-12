@@ -1,17 +1,20 @@
 import streamlit as st
 
-# Class to generate multiple Streamlit pages using an object-oriented approach
-class MultiPage: 
-    def __init__(self, app_name) -> None:
+class MultiPage:
+    def __init__(self, app_name):
         self.pages = []
         self.app_name = app_name
     
-    def add_page(self, title, func) -> None: 
+    def add_page(self, title, func):
         self.pages.append({"title": title, "function": func})
-
+    
     def run(self):
-        st.title(self.app_name)
-        page = st.sidebar.radio(
-            'Menu', self.pages, format_func=lambda page: page['title']
-        )
-        page['function']()
+        st.sidebar.title(self.app_name)  # Move app title to sidebar
+        page_titles = [page['title'] for page in self.pages]
+        selected_title = st.sidebar.radio("Menu", page_titles)
+        
+        # Find the page dict that matches selection
+        for page in self.pages:
+            if page['title'] == selected_title:
+                page['function']()  # Run the page
+                break
