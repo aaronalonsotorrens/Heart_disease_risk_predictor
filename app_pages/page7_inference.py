@@ -69,10 +69,6 @@ def page_inference_tool_body():
 
     # ---- Example Patients ----
     if st.checkbox("Use Example Patients"):
-        sample_patient = {
-            "age": 55, "sex": 1, "cp": 3, "trestbps": 240, "chol": 220, "fbs": 0,
-            "restecg": 1, "thalach": 150, "exang": 0, "oldpeak": 1.5, "slope": 2, "ca": 0, "thal": 3
-        }
         high_risk_patient = {
             "age": 68, "sex": 1, "cp": 4, "trestbps": 180, "chol": 300, "fbs": 1,
             "restecg": 2, "thalach": 120, "exang": 1, "oldpeak": 3.0, "slope": 3, "ca": 2, "thal": 7
@@ -84,37 +80,169 @@ def page_inference_tool_body():
 
         patient_choice = st.radio(
             "Choose Example Patient:",
-            ["Sample Patient", "High-Risk Patient", "Low-Risk Patient"]
+            ["High-Risk Patient", "Low-Risk Patient"]
         )
         patient_data = pd.DataFrame([
-            sample_patient if patient_choice=="Sample Patient"
-            else high_risk_patient if patient_choice=="High-Risk Patient"
+            high_risk_patient if patient_choice=="High-Risk Patient"
             else low_risk_patient
         ])
 
     # ---- Run Prediction ----
     if st.button("Run Prediction"):
-        processed_data = preprocess_input(patient_data, pipeline_best)
-        result = enhanced_predict(pipeline_best, processed_data)
+        # Rebuild patient_data here to ensure latest inputs are used
+        if st.checkbox("Use Example Patients"):
+            patient_choice = st.radio(
+                "Choose Example Patient:",
+                ["High-Risk Patient", "Low-Risk Patient"]
+            )
+            patient_data = pd.DataFrame([
+                high_risk_patient if patient_choice=="High-Risk Patient"
+                else low_risk_patient
+            ])
+        else:
+            # Build from user inputs
+            patient_data = pd.DataFrame([{
+                "age": age,
+                "sex": sex,
+                "cp": cp,
+                "trestbps": trestbps,
+                "chol": chol,
+                "fbs": fbs,
+                "restecg": restecg,
+                "thalach": thalach,
+                "exang": exang,
+                "oldpeak": oldpeak,
+                "slope": slope,
+                "ca": ca,
+                "thal": thal
+            }])
 
-        st.success("✅ Prediction Results")
-        st.write(f"**Prediction:** {result['Prediction']}")
-        st.write(f"**Probability:** {result['Probability']:.1f}%")
-        st.write(f"**Risk Band:** {result['Risk Band']}")
-        st.write(f"**Recommendation:** {result['Recommendation']}")
+    # ---- Preprocess & Predict ----
+    processed_data = preprocess_input(patient_data, pipeline_best)
+    result = enhanced_predict(pipeline_best, processed_data)
 
+    # ---- Display Results ----
+    st.success("✅ Prediction Results")
+    st.write(f"**Prediction:** {result['Prediction']}")
+    st.write(f"**Probability:** {result['Probability']*100:.2f}%")
+    st.write(f"**Risk Band:** {result['Risk Band']}")
+    st.write(f"**Recommendation:** {result['Recommendation']}")
 
-        # ---- Top Contributions Table (optional) ----
-        top_contrib = result.get("Top Contributions")
-        if top_contrib is not None and not top_contrib.empty:
-            st.markdown("**Top Contributing Features:**")
-            st.table(top_contrib)
+    with st.expander("⚠️ Advanced Input (Full 22 Features)"):
+        st.warning(
+            "Optional advanced entry for testing all model features. "
+            "This includes engineered and dataset-specific fields. "
+            "If results indicate elevated risk, please consult a healthcare professional."
+        )
 
-            # ---- Simple Bar Plot ----
-            top_features = top_contrib.head(5)
-            fig, ax = plt.subplots(figsize=(6, 4))
-            ax.barh(top_features["Feature"], top_features["Contribution"], color='royalblue')
-            ax.set_xlabel("Contribution")
-            ax.set_title("Top Feature Contributions")
-            st.pyplot(fig)
+        # ---- Core numeric inputs ----
+        adv_id = st.number_input("Patient ID", 0, 9999, 0, key="adv_id")
+        adv_age = st.number_input("Age", 0, 120, 55, key="adv_age")
+        adv_trestbps = st.number_input("Resting Blood Pressure (trestbps)", 50, 250, 120, key="adv_trestbps")
+        adv_chol = st.number_input("Serum Cholesterol (chol)", 100, 600, 200, key="adv_chol")
+        adv_thalach = st.number_input("Maximum Heart Rate Achieved (thalach)", 60, 220, 150, key="adv_thalach")
+        adv_oldpeak = st.number_input("ST Depression (oldpeak)", 0.0, 10.0, 1.0, 0.1, key="adv_oldpeak")
 
+        # ---- Engineered features manually input ----
+        adv_chol_age_ratio = st.number_input("Cholesterol / Age Ratio (chol_age_ratio)", 0.0, 20.0, 3.5, 0.1)
+        adv_oldpeak_thalach_ratio = st.number_input("Oldpeak / Thalach Ratio (oldpeak_thalach_ratio)", 0.0, 1.0, 0.01, 0.01)
+        adv_age_trestbps = st.number_input("Age * Trestbps (age_trestbps)", 0, 50000, 9000)
+        adv_thalch_oldpeak = st.number_input("Thalach * Oldpeak (thalch_oldpeak)", 0, 5000, 450)
+        adv_age_group = st.number_input("Age Group (age_group, 0-5)", 0, 5, 4)
+
+        # ---- One-hot encoded categorical features ----
+        adv_sex_male = st.radio("Sex: Male?", [0,1], key="adv_sex_male")
+        adv_dataset = st.selectbox(
+            "Dataset Source",
+            ["Default", "Hungary", "Switzerland", "VA Long Beach"],
+            key="adv_dataset"
+        )
+        adv_cp = st.selectbox(
+            "Chest Pain Type",
+            ["Typical angina", "Atypical angina", "Non-anginal pain", "Asymptomatic"],
+            key="adv_cp"
+        )
+        adv_fbs = st.radio("Fasting Blood Sugar > 120 mg/dl", [0,1], key="adv_fbs")
+        adv_restecg = st.selectbox(
+            "Resting ECG",
+            ["Normal", "ST-T abnormality", "Left ventricular hypertrophy"],
+            key="adv_restecg"
+        )
+        adv_exang = st.radio("Exercise Induced Angina", [0,1], key="adv_exang")
+
+        # ---- Build patient dictionary ----
+        adv_patient = pd.DataFrame([{
+            "id": adv_id,
+            "age": adv_age,
+            "trestbps": adv_trestbps,
+            "chol": adv_chol,
+            "thalch": adv_thalach,
+            "oldpeak": adv_oldpeak,
+            "sex_Male": adv_sex_male,
+            "dataset_Hungary": 1 if adv_dataset=="Hungary" else 0,
+            "dataset_Switzerland": 1 if adv_dataset=="Switzerland" else 0,
+            "dataset_VA Long Beach": 1 if adv_dataset=="VA Long Beach" else 0,
+            "cp_typical angina": 1 if adv_cp=="Typical angina" else 0,
+            "cp_atypical angina": 1 if adv_cp=="Atypical angina" else 0,
+            "cp_non-anginal": 1 if adv_cp=="Non-anginal pain" else 0,
+            "fbs_True": adv_fbs,
+            "restecg_normal": 1 if adv_restecg=="Normal" else 0,
+            "restecg_st-t abnormality": 1 if adv_restecg=="ST-T abnormality" else 0,
+            "exang_True": adv_exang,
+            "chol_age_ratio": adv_chol_age_ratio,
+            "oldpeak_thalach_ratio": adv_oldpeak_thalach_ratio,
+            "age_trestbps": adv_age_trestbps,
+            "thalch_oldpeak": adv_thalch_oldpeak,
+            "age_group": adv_age_group
+        }])
+
+        # ---- Advanced Example Patients ----
+        if st.checkbox("Use Advanced Example Patients"):
+            adv_high_risk_patient = {
+                "id": 1,
+                "age": 68, "trestbps": 180, "chol": 300, "thalch": 120, "oldpeak": 3.0,
+                "sex_Male": 1,
+                "dataset_Hungary": 0, "dataset_Switzerland": 0, "dataset_VA Long Beach": 1,
+                "cp_typical angina": 0, "cp_atypical angina": 0, "cp_non-anginal": 0,
+                "fbs_True": 1, "restecg_normal": 0, "restecg_st-t abnormality": 0, "exang_True": 1,
+                "chol_age_ratio": 300/68,
+                "oldpeak_thalach_ratio": 3.0/120,
+                "age_trestbps": 68*180,
+                "thalch_oldpeak": 120*3.0,
+                "age_group": 4
+            }
+
+            adv_very_high_risk_patient = {
+                "id": 2,
+                "age": 75, "trestbps": 210, "chol": 380, "thalch": 100, "oldpeak": 4.8,
+                "sex_Male": 1,
+                "dataset_Hungary": 0, "dataset_Switzerland": 0, "dataset_VA Long Beach": 1,
+                "cp_typical angina": 0, "cp_atypical angina": 0, "cp_non-anginal": 0,
+                "fbs_True": 1, "restecg_normal": 0, "restecg_st-t abnormality": 1, "exang_True": 1,
+                "chol_age_ratio": 380/75,
+                "oldpeak_thalach_ratio": 4.8/100,
+                "age_trestbps": 75*210,
+                "thalch_oldpeak": 100*4.8,
+                "age_group": 5
+            }
+
+            adv_patient_choice = st.radio(
+                "Choose Advanced Example Patient:",
+                ["High-Risk Patient", "Very High-Risk Patient"]
+            )
+
+            # Build DataFrame from chosen example patient
+            adv_patient = pd.DataFrame([
+                adv_high_risk_patient if adv_patient_choice == "High-Risk Patient"
+                else adv_very_high_risk_patient
+            ])
+
+        # ---- Run Advanced Prediction ----
+        if st.button("Run Advanced Prediction", key="run_adv_pred"):
+            result_adv = enhanced_predict(pipeline_best, adv_patient)
+
+            st.success("✅ Advanced Prediction Results")
+            st.write(f"**Prediction:** {result_adv['Prediction']}")
+            st.write(f"**Probability:** {result_adv['Probability']*100:.2f}%")
+            st.write(f"**Risk Band:** {result_adv['Risk Band']}")
+            st.write(f"**Recommendation:** {result_adv['Recommendation']}")
