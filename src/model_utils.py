@@ -120,14 +120,17 @@ def enhanced_predict(pipeline, df: pd.DataFrame):
     pred = int(prob >= 0.5)
 
     # Risk band
-    if prob < 0.3:
+    if prob < 0.2:
         risk_band = "Low"
         recommendation = "Maintain healthy lifestyle."
-    elif prob < 0.7:
+    elif prob < 0.4:
         risk_band = "Medium"
         recommendation = "Consult a doctor and monitor risk factors."
-    else:
+    elif prob < 0.5:
         risk_band = "High"
+        recommendation = "Seek medical attention and improve healthy lifestyle"
+    else:
+        risk_band = "Very High"
         recommendation = "Immediate medical attention recommended."
 
     # Optional: top contributing features

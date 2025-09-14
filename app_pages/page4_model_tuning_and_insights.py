@@ -1,5 +1,3 @@
-# app_pages/page5_ablation_study.py
-
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -32,7 +30,7 @@ def get_feature_importance(pipeline, X_test):
         return None
 
 
-def page_ablation_study_body():
+def page_model_tuning_and_insights_body():
     """Streamlit Page 5: Tuned Models Comparison & Feature Importance."""
     
     st.title("Tuned Models: Comparison & Feature Importance")

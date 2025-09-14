@@ -6,7 +6,7 @@ import plotly.express as px
 
 sns.set_style("whitegrid")
 
-def page_eda_body(data: pd.DataFrame):
+def page_data_exploration_and_insights_body(data: pd.DataFrame):
     """
     Exploratory Data Analysis (EDA) page.
     Accepts a DataFrame 'data' with a 'HeartDisease' column.

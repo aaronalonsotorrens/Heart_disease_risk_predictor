@@ -21,26 +21,25 @@ data = load_data(data_path)
 
 # IMPORT PAGE FUNCTIONS
 
-from app_pages.page1_summary import page_summary_body
-from app_pages.page2_project_overview import page_project_overview_body
-from app_pages.page3_eda import page_eda_body
-from app_pages.page4_model_training import page_model_training_body
-from app_pages.page5_ablation_study import page_ablation_study_body
-from app_pages.page6_advanced_pipeline import page_advanced_experiments_body
-from app_pages.page7_inference import page_inference_tool_body
+from app_pages.page1_project_overview_and_goals import page_project_overview_and_goals_body
+from app_pages.page2_data_exploration_and_insights import page_data_exploration_and_insights_body
+from app_pages.page3_model_development_and_evaluation import page_model_development_and_evaluation_body
+from app_pages.page4_model_tuning_and_insights import page_model_tuning_and_insights_body
+from app_pages.page5_model_comparison_and_selection import page_model_comparison_and_selection_body
+from app_pages.page6_heart_risk_predictor_tool import page_heart_risk_predictor_tool_body
+
 
 # CREATE MULTI-PAGE APP
 
 app = MultiPage("Heart Disease Prediction Dashboard")
 
 # Add pages in logical order
-app.add_page("Summary", lambda: page_summary_body(data))
-app.add_page("Project Overview", lambda: page_project_overview_body(data))
-app.add_page("Exploratory Data Analysis", lambda: page_eda_body(data))
-app.add_page("Model Training", page_model_training_body)
-app.add_page("Ablation Study", page_ablation_study_body)
-app.add_page("Advanced Experiments", page_advanced_experiments_body)
-app.add_page("Inference Tool", page_inference_tool_body)
+app.add_page("📌 Project Overview & Goals", lambda: page_project_overview_and_goals_body(data))
+app.add_page("📊 Data Exploration & Insights", lambda: page_data_exploration_and_insights_body(data))
+app.add_page("⚙️ Model Development & Evaluation", page_model_development_and_evaluation_body)
+app.add_page("🔧 Model Tuning & Insights", page_model_tuning_and_insights_body)
+app.add_page("📈 Model Comparison & Selection", page_model_comparison_and_selection_body)
+app.add_page("🩺 Heart Risk Predictor Tool", page_heart_risk_predictor_tool_body)
 
 # RUN APP
 

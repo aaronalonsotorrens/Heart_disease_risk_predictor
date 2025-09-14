@@ -5,7 +5,7 @@ import seaborn as sns
 
 sns.set_style("whitegrid")
 
-def page_advanced_experiments_body():
+def page_model_comparison_and_selection_body():
     st.title("Advanced Experiments & Best Pipeline Selection")
 
     st.info(

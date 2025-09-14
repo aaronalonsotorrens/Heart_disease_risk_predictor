@@ -1,5 +1,3 @@
-# page_7_inference.py
-
 import streamlit as st
 import pandas as pd
 from src.model_utils import enhanced_predict, load_pipeline, preprocess_input
@@ -9,7 +7,7 @@ pipeline_best = load_pipeline(
     "/workspaces/Heart_disease_risk_predictor/outputs/models/deployment/best_model_pipeline.pkl"
 )
 
-def page_inference_tool_body():
+def page_heart_risk_predictor_tool_body():
     st.title("🩺 Patient Risk Prediction Tool")
     st.info(
         "Input patient clinical data to predict heart disease risk using the best trained model. "
@@ -295,7 +293,7 @@ def page_inference_tool_body():
         )
 
         # ---- Engineered Features ----
-        adv_thalch = adv_thalach  # copy for pipeline
+        adv_thalch = adv_thalach  
         adv_chol_age_ratio = round(min(adv_chol / max(adv_age, 1), 10), 3)
         adv_oldpeak_thalach_ratio = round(min(adv_oldpeak / max(adv_thalach, 1), 10), 3)
         adv_age_trestbps = adv_age * adv_trestbps

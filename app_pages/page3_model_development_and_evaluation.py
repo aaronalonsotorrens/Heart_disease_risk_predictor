@@ -7,7 +7,7 @@ from sklearn.metrics import confusion_matrix, RocCurveDisplay
 
 sns.set_style("whitegrid")
 
-def page_model_training_body():
+def page_model_development_and_evaluation_body():
     """Model Training page with baseline vs tuned model comparison."""
 
     # ---- Load models and performance data ----
