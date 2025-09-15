@@ -8,7 +8,7 @@ from sklearn.metrics import confusion_matrix, RocCurveDisplay
 sns.set_style("whitegrid")
 
 def page_model_development_and_evaluation_body():
-    """Model Training page with baseline vs tuned model comparison."""
+    """Model Development and Evaluation"""
 
     # ---- Load models and performance data ----
     baseline_models = joblib.load("/workspaces/Heart_disease_risk_predictor/outputs/models/baseline_models.pkl")  
@@ -17,8 +17,7 @@ def page_model_development_and_evaluation_body():
         "/workspaces/Heart_disease_risk_predictor/outputs/models/splits.pkl"
     )
 
-    st.title("Model Training: Baseline vs Tuned Models")
-
+    st.title("Model Development page and Evaluation")
     # ---- Why / Goal ----
     st.info(
         "Goal: Evaluate different **baseline models** to identify the best starting point for predicting heart disease risk. "
