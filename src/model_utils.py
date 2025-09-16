@@ -131,3 +131,10 @@ def enhanced_predict(pipeline, df: pd.DataFrame):
     else:
         risk_band = "Very High"
         recommendation = "Immediate medical attention recommended."
+
+    return {
+        "Prediction": pred,
+        "Probability": round(prob, 3),
+        "Risk Band": risk_band,
+        "Recommendation": recommendation,
+    }

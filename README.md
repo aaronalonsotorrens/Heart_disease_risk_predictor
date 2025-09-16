@@ -731,11 +731,14 @@ The website was tested on:
 
 ## Unfixed Bugs
 
-At the time of submission, no known unfixed bugs remain.
+Advanced Input Expander Behavior
 
-- All pages of the Streamlit dashboard run without errors.
-- Model pipelines load successfully for inference.  
-- If future issues arise during deployment, they will be documented here.
+- Due to the way Streamlit reruns the script on any widget interaction, the “Full Advanced Input” expander collapses
+  after clicking a prediction button by default.
+
+- This is normal behavior and not a bug.
+
+- We handle this in the code using st.session_state so that the expander remains open after running predictions.
 
 ---
 

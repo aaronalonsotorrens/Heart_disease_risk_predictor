@@ -194,8 +194,15 @@ def page_heart_risk_predictor_tool_body():
     if st.button("Run Prediction", key="run_pred"):
         processed_data = preprocess_input(patient_data, pipeline_best)
         result = enhanced_predict(pipeline_best, processed_data)
+
+        pred_label = (
+            "No Heart Disease (0)" 
+            if result['Prediction'] == 0 
+            else "Heart Disease Risk (1)"
+        )
+
         st.success("✅ Prediction Results")
-        st.write(f"**Prediction:** {result['Prediction']}")
+        st.write(f"**Prediction:** {pred_label}")
         st.write(f"**Probability:** {result['Probability']*100:.2f}%")
         st.write(f"**Risk Band:** {result['Risk Band']}")
         st.write(f"**Recommendation:** {result['Recommendation']}")
@@ -212,12 +219,17 @@ def page_heart_risk_predictor_tool_body():
         )
     )
     # ---- Fully Advanced Input (All 22 features) ----
-    with st.expander("⚠️ Full Advanced Input (All Features)"):
-        st.warning(
-            "Manually set all features. "
-            "Use with caution for testing extreme/high-risk patients."
-        )
+    if "adv_expander_open" not in st.session_state:
+        st.session_state.adv_expander_open = False
 
+    with st.expander(
+        "⚠️ Full Advanced Input (All Features)",
+        expanded=st.session_state.adv_expander_open
+    ):
+        st.warning(
+            "Manually set all features. Use with caution for testing " 
+            "extreme/high-risk patients."
+        )
         # ---- Core Clinical Features (same style as simple version) ----
         adv_id = st.number_input("Patient ID", 0, 9999, 999, key="adv_id")
         adv_age = st.number_input("Age (years)", 0, 120, 70, key="adv_age")
@@ -386,10 +398,18 @@ def page_heart_risk_predictor_tool_body():
 
         # Prediction button
         if st.button("Run Full Advanced Prediction"):
+            st.session_state.adv_expander_open = True 
             processed_data = preprocess_input(full_patient, pipeline_best)
             result = enhanced_predict(pipeline_best, processed_data)
+
+            pred_label = (
+                "No Heart Disease (0)" 
+                if result['Prediction'] == 0 
+                else "Heart Disease Risk (1)"
+            )
+
             st.success("✅ Full Advanced Prediction Results")
-            st.write(f"**Prediction:** {result['Prediction']}")
+            st.write(f"**Prediction:** {pred_label}")
             st.write(f"**Probability:** {result['Probability']*100:.2f}%")
             st.write(f"**Risk Band:** {result['Risk Band']}")
             st.write(f"**Recommendation:** {result['Recommendation']}")
