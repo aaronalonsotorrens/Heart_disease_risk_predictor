@@ -39,7 +39,53 @@ Heart disease remains one of the leading causes of morbidity and mortality world
 
 ---
 
-## 3. Kanban Board – User Stories & Epics
+## Hypotheses & Validation
+
+Before starting the analysis, we formulated the following hypotheses:
+
+1. **Age and cholesterol levels are positively correlated with heart disease risk.**  
+   - *Validation:* Statistical tests and correlation heatmaps confirmed that higher `age` and `chol` values were more common among patients with heart disease.
+
+2. **Resting blood pressure (`trestbps`) and maximum heart rate achieved (`thalach`) are associated with heart disease risk.**  
+   - *Validation:* EDA showed that patients with higher `trestbps` and lower `thalach` were more likely to have heart disease. Both variables appeared as important predictors in model feature importance rankings.
+
+3. **Machine learning models can achieve at least 80% accuracy in predicting heart disease risk.**  
+   - *Validation:* Our best-performing pipeline (Random Forest) achieved test ROC-AUC > 0.80, confirming this hypothesis.
+
+---
+
+## Rationale Mapping
+
+Each business requirement was mapped to a specific analysis and ML task:
+
+- **Business Requirement 1:** Identify key factors that correlate with heart disease.  
+  - *Data Task:* Exploratory analysis (heatmaps, distributions, group comparisons).  
+  - *ML Task:* Feature importance ranking from Random Forest, XGBoost, LightGBM and Logistic Regression models
+
+- **Business Requirement 2:** Predict likelihood of heart disease for a given patient.  
+  - *Data Task:* Data preprocessing (scaling, encoding, cleaning).  
+  - *ML Task:* Train, evaluate, and deploy classification models (Logistic Regression, Random Forest, XGBoost, LightGBM).  
+  - *Dashboard Feature:* “Patient Risk Prediction Tool” page.
+
+---
+
+ML Business Case
+
+The client is interested in moving beyond descriptive analysis to **predictive analytics**:
+
+- **Problem:** Healthcare professionals and patients often lack quick, data-driven tools for estimating heart disease risk.  
+- **Proposed Solution:** Develop and deploy a machine learning model that predicts individual risk based on medical and lifestyle factors.  
+- **Value:**  
+  - Supports earlier interventions and preventive care.
+  - Helps clinicians prioritize high-risk patients.  
+- **Feasibility:**  
+  - Dataset includes a balanced set of medical and lifestyle features.  
+  - Models achieved ROC-AUC > 0.80, confirming predictive capability.  
+  - Deployment via Streamlit enables direct user interaction.
+
+---
+
+## Kanban Board – User Stories & Epics
 
 The project workflow is organized using a **Kanban methodology** to track progress and prioritize tasks.
 
@@ -92,13 +138,13 @@ C → Could have (nice-to-have, “if time allows”)
 | [S] | As a project manager, I want to implement version control for the model and dashboard code so that I can manage updates and rollbacks safely. |
 | [C] | As a stakeholder, I want to have a technical page on the dashboard showing metrics and pipeline details so that I can verify the robustness of the solution. |
 
-## 4. Dataset Content
+## Dataset Content
 
 The **Heart Disease dataset** is sourced from the **UCI Machine Learning Repository** via Kaggle. The dataset contains clinical and demographic data for patients, which will be used to predict the presence of heart disease.  
 
 Each row represents a patient, and each column represents a clinical or demographic attribute.
 
-### 4.1 Feature Definitions
+### Feature Definitions
 
 | Variable | Meaning | Units / Categories |
 |----------|---------|------------------|
@@ -119,7 +165,7 @@ Each row represents a patient, and each column represents a clinical or demograp
 
 ---
 
-### 4.2 Project Terms & Jargon
+### Project Terms & Jargon
 
 - **Patient:** Individual under clinical evaluation.  
 - **Feature / Variable:** An attribute measured for each patient.  
@@ -129,13 +175,9 @@ Each row represents a patient, and each column represents a clinical or demograp
 
 ---
 
-# Heart Disease Prediction Dashboard
+## Project Design Heart Disease Prediction Dashboard
 
 This project delivers an **interactive, AI-powered dashboard** for heart disease risk prediction. It focuses on **data visualization, model evaluation, and patient risk prediction**, emphasizing usability, interpretability, and actionable insights.
-
----
-
-## 5. Project Design
 
 ### 🛠 Core Functionality
 
@@ -149,15 +191,11 @@ This project delivers an **interactive, AI-powered dashboard** for heart disease
   - **Advanced Mode:** Full 22-feature input for more precise predictions and risk stratification.
   - Outputs include predicted class, probability, risk band, and recommendations.
 
----
-
 ### 🌈 Color Scheme & Typography
 
 - Minimal and accessible palette prioritizing clarity and readability.
 - Streamlit default typography enhanced with **info boxes, success messages, and warnings** for visual hierarchy.
 - Consistent styling for headings, subheadings, and body text across pages.
-
----
 
 ### 🖼 Layout & Responsiveness
 
@@ -169,8 +207,6 @@ This project delivers an **interactive, AI-powered dashboard** for heart disease
   5. **Prediction Tool:** Single-patient or advanced multi-feature input with real-time predictions.
 - Fully responsive layout within Streamlit — interactive visualizations adapt to screen size and user selections.
 
----
-
 ### 🧭 User Interaction & Guidance
 
 - **Collapsible sections** and **expanders** for optional advanced inputs.
@@ -180,9 +216,9 @@ This project delivers an **interactive, AI-powered dashboard** for heart disease
   
 ---
 
-## 🫀 6. Heart Disease Risk Predictor — Notebook Workflow
+## Workbook Workflow - Heart Disease Risk Predictor
 
-## Notebook 1 — Data Upload & Initial Inspection
+### Notebook 1 — Data Upload & Initial Inspection
 
 **Purpose:**  
 Introduce and load the heart disease dataset for exploration and preprocessing.
@@ -197,9 +233,7 @@ Introduce and load the heart disease dataset for exploration and preprocessing.
 **Outcome:**  
 Dataset loaded, cleaned of major inconsistencies, and ready for deeper preprocessing.
 
----
-
-## Notebook 2 — Data Preprocessing & Feature Engineering
+### Notebook 2 — Data Preprocessing & Feature Engineering
 
 **Purpose:**  
 Transform raw data into a machine-learning-ready format.
@@ -215,9 +249,7 @@ Transform raw data into a machine-learning-ready format.
 **Outcome:**  
 Cleaned, numeric, fully-preprocessed dataset saved for model training.
 
----
-
-## Notebook 3 — Exploratory Data Analysis (EDA) & Feature Selection
+### Notebook 3 — Exploratory Data Analysis (EDA) & Feature Selection
 
 **Purpose:**  
 Understand feature distributions, relationships, and importance before modeling.
@@ -232,9 +264,7 @@ Understand feature distributions, relationships, and importance before modeling.
 **Outcome:**  
 Informed selection of features for model training, ensuring interpretability and predictive power.
 
----
-
-## Notebook 4 — Model Training & Baseline Performance
+### Notebook 4 — Model Training & Baseline Performance
 
 **Purpose:**  
 Train multiple ML models and establish baseline performance.
@@ -249,9 +279,7 @@ Train multiple ML models and establish baseline performance.
 **Outcome:**  
 Baseline performance recorded; models selected for hyperparameter optimization.
 
----
-
-## Notebook 5 — Hyperparameter Tuning & Advanced Experiments
+### Notebook 5 — Hyperparameter Tuning & Advanced Experiments
 
 **Purpose:**  
 Optimize model performance using systematic tuning and cross-validation.
@@ -266,9 +294,7 @@ Optimize model performance using systematic tuning and cross-validation.
 **Outcome:**  
 Tuned models ready for final evaluation, with improved generalization over baseline.
 
----
-
-## Notebook 6 — Final Evaluation & Deployment Prep
+### Notebook 6 — Final Evaluation & Deployment Prep
 
 **Purpose:**  
 Assess generalization of tuned models and prepare the best pipeline for deployment.
@@ -284,9 +310,7 @@ Assess generalization of tuned models and prepare the best pipeline for deployme
 **Outcome:**  
 Best model identified and saved; evaluation results documented for reproducibility and reporting.
 
----
-
-## Notebook 7 — Model Deployment & Inference
+### Notebook 7 — Model Deployment & Inference
 
 **Purpose:**  
 Enable deployment and reproducible inference on new patient data.
@@ -302,9 +326,11 @@ Enable deployment and reproducible inference on new patient data.
 **Outcome:**  
 Pipeline ready for API/web integration; interpretable and actionable predictions validated.
 
-# 🫀 6.1 Heart Disease Risk Predictor — Prediction Model Details
+---
 
-## Classification Model — Heart Disease Risk
+## Prediction Model Details
+
+### Classification Model — Heart Disease Risk
 
 We aim to develop a **machine learning model to predict the likelihood of heart disease** in patients based on clinical and demographic features. The target variable is **categorical** and contains **2 classes**:
 
@@ -315,8 +341,6 @@ This is a **supervised, 2-class, single-label classification model**.
 
 **Goal:**  
 Provide healthcare practitioners and public health stakeholders with reliable insights to identify high-risk patients early and inform preventive interventions.
-
----
 
 ### Model Success Metrics
 
@@ -364,15 +388,15 @@ Provide healthcare practitioners and public health stakeholders with reliable in
 - **Multi-class Risk Band Classification:** Patients can be categorized into `Low`, `Medium`, or `High` risk based on predicted probability thresholds.  
 - **Feature Contribution Reporting:** Top contributing variables for each prediction are returned to enhance clinical interpretability.
 
-# Heart Disease Prediction Dashboard
+---
 
-## Overview
+## Heart Disease Prediction Dashboard
+
+### Overview
 
 This Streamlit dashboard predicts heart disease risk using clinical patient data. It includes EDA, model training, ablation studies, advanced experiments, and an inference tool for real-time predictions.
 
----
-
-## 7. Dashboard Design (Streamlit App Pages)
+## Dashboard Design (Streamlit App Pages)
 
 ### Dashboard pages
 
@@ -423,8 +447,6 @@ The page provides:
 **Outcome:**  
 Users understand the purpose of the project, the data being used, and the key goals for predictive modeling.
 
----
-
 ### Project overview
 
 ![page 1](readme-docs/project_overview.png)
@@ -432,8 +454,6 @@ Users understand the purpose of the project, the data being used, and the key go
 ### Project overview with sample data
 
 ![page 1](readme-docs/project_overview_sample_data.png)
-
----
 
 ### Page 2: Exploratory Data Analysis (EDA)
 
@@ -467,8 +487,6 @@ Insights guide feature selection and inform the ML models.
 
 ![page 2](readme-docs/EDA_interactive_feature.png)
 
----
-
 ### Page 3: Model Development and Evaluation
 
 **Before the analysis:**  
@@ -491,8 +509,6 @@ Identifies the best-performing models for further evaluation.
 ### Model Development Interactive Options
 
 ![page 3](readme-docs/model_development_options.png)
-
----
 
 ### Page 4: Model Tuning and Insights
 
@@ -518,8 +534,6 @@ Users see which features are most influential and validate feature engineering.
 
 ![page 4](readme-docs/tuned_models_options.png)
 
----
-
 ### Page 5: Model Comparison and Selection
 
 **Before the analysis:**  
@@ -539,8 +553,6 @@ Provides confidence in the final model pipeline for real-world deployment.
 ### Best Model Selection
 
 ![page 5](readme-docs/best_pipeline_selection.png)
-
----
 
 ### Page 6: Inference Tool (Core Patient Prediction)
 
@@ -648,6 +660,18 @@ GitHub Projects was used in part for the planning of this website to create and 
 
 ## Testing
 
+### Python Testing
+
+The project was tested for pep8 compliance using pycodestyle.
+
+### App_pages python code test
+
+![testing](readme-docs/pycodestyle_app_pages)
+
+### Python code across files
+
+![testing](readme-docs/pycodestyle_python_code)
+
 ### Automated Testing
 
 Below the steps for manual testing of the site have been arranged into tables.
@@ -689,3 +713,13 @@ The website was tested on:
 - Kaggle / UCI ML Repository: Data sources.
 
 - Git: Version control.
+
+---
+
+## Unfixed Bugs
+
+At the time of submission, no known unfixed bugs remain.
+
+- All pages of the Streamlit dashboard run without errors.
+- Model pipelines load successfully for inference.  
+- If future issues arise during deployment, they will be documented here.

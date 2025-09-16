@@ -215,7 +215,7 @@ def page_heart_risk_predictor_tool_body():
     # ---- Fully Advanced Input (All 22 features) ----
     with st.expander("⚠️ Full Advanced Input (All Features)"):
         st.warning(
-            "Manually set all features"
+            "Manually set all features. "
             "Use with caution for testing extreme/high-risk patients."
         )
 

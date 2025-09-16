@@ -16,13 +16,13 @@ You can safely delete the Template Instructions section of this README.md file, 
 
 3. Then, from the Codespaces tab, click Create codespace on main.
 
-5. Wait for the workspace to open. This can take a few minutes.
+4. Wait for the workspace to open. This can take a few minutes.
 
-6. Open a new terminal and `pip3 install -r requirements.txt`
+5. Open a new terminal and `pip3 install -r requirements.txt`
 
-7. Open the jupyter_notebooks directory and click on the notebook you want to open.
+6. Open the jupyter_notebooks directory and click on the notebook you want to open.
 
-8. Click the kernel button and choose Python Environments.
+7. Click the kernel button and choose Python Environments.
 
 Note that the kernel says Python 3.12.1 as it inherits from the workspace so it will be Python-3.12.1 as installed by Codespaces. To confirm this you can use `! python --version` in a notebook code cell.
 
