@@ -4,7 +4,7 @@ from src.model_utils import enhanced_predict, load_pipeline, preprocess_input
 
 # Load best pipeline
 pipeline_best = load_pipeline(
-    "/workspaces/Heart_disease_risk_predictor/outputs/models/"
+    "outputs/models/"
     "deployment/best_model_pipeline.pkl"
 )
 

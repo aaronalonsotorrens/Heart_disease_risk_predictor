@@ -7,23 +7,9 @@ import numpy as np
 def load_pipeline(path: str):
     """
     Load a saved model pipeline from disk.
-    If an absolute path (e.g. /workspaces/...) does not exist,
-    it will try to resolve the equivalent inside the /app directory
-    for Heroku deployment.
     """
-    # If the given path works, just load it
-    if os.path.exists(path):
-        return joblib.load(path)
+    return joblib.load(path)
 
-    # If running on Heroku, replace /workspaces/... with /app
-    heroku_path = path.replace("/workspaces/Heart_disease_risk_predictor",
-                                "/app")
-    if os.path.exists(heroku_path):
-        return joblib.load(heroku_path)
-
-    raise FileNotFoundError(
-        f"Model file not found. Tried:\n- {path}\n- {heroku_path}"
-    )
 
 def preprocess_input(df: pd.DataFrame, pipeline) -> pd.DataFrame:
     """

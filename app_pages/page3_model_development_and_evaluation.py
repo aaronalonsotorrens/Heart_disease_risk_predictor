@@ -13,15 +13,15 @@ def page_model_development_and_evaluation_body():
 
     # ---- Load models and performance data ----
     baseline_models = joblib.load(
-        "/workspaces/Heart_disease_risk_predictor/outputs/models/"
+        "outputs/models/"
         "baseline_models.pkl"
     )
     performance_df = pd.read_csv(
-        "/workspaces/Heart_disease_risk_predictor/outputs/models/"
+        "outputs/models/"
         "baseline_model_performance.csv"
     )
     X_train, X_val, X_test, y_train, y_val, y_test = joblib.load(
-        "/workspaces/Heart_disease_risk_predictor/outputs/models/splits.pkl"
+        "outputs/models/splits.pkl"
     )
 
     st.title("Model Development page and Evaluation")
