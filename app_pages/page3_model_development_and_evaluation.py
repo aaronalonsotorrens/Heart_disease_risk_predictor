@@ -13,12 +13,10 @@ def page_model_development_and_evaluation_body():
 
     # ---- Load models and performance data ----
     baseline_models = joblib.load(
-        "outputs/models/"
-        "baseline_models.pkl"
+        "outputs/models/baseline_models.pkl"
     )
     performance_df = pd.read_csv(
-        "outputs/models/"
-        "baseline_model_performance.csv"
+        "outputs/models/baseline_model_performance.csv"
     )
     X_train, X_val, X_test, y_train, y_val, y_test = joblib.load(
         "outputs/models/splits.pkl"

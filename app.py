@@ -40,10 +40,8 @@ def load_data(path: str):
     """
     return pd.read_csv(path)
 
-
 data_path = (
-    "/workspaces/Heart_disease_risk_predictor/outputs/datasets/cleaned/"
-    "heart_disease_cleaned.csv"
+    "outputs/datasets/cleaned/heart_disease_cleaned.csv"
 )
 data = load_data(data_path)
 

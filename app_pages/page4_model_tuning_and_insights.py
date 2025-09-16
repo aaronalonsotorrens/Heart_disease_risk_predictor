@@ -40,30 +40,30 @@ def page_model_tuning_and_insights_body():
     # ---- Load models ----
     tuned_models = {
         "Logistic Regression": joblib.load(
-            "/workspaces/Heart_disease_risk_predictor/outputs/models/"
+            "outputs/models/"
             "tuned_models/best_logistic_regression_pipeline.pkl"
         ),
         "Random Forest": joblib.load(
-            "/workspaces/Heart_disease_risk_predictor/outputs/models/"
+            "outputs/models/"
             "tuned_models/best_random_forest_pipeline.pkl"
         ),
         "XGBoost": joblib.load(
-            "/workspaces/Heart_disease_risk_predictor/outputs/models/"
+            "outputs/models/"
             "tuned_models/best_xgboost_pipeline.pkl"
         ),
         "LightGBM": joblib.load(
-            "/workspaces/Heart_disease_risk_predictor/outputs/models/"
+            "outputs/models/"
             "tuned_models/best_lightgbm_pipeline.pkl"
         ),
     }
 
     performance_df = pd.read_csv(
-        "/workspaces/Heart_disease_risk_predictor/outputs/models/"
+        "outputs/models/"
         "model_performance_summary.csv"
     )
 
     X_train, X_val, X_test, y_train, y_val, y_test = joblib.load(
-        "/workspaces/Heart_disease_risk_predictor/outputs/models/splits.pkl"
+        "outputs/models/splits.pkl"
     )
 
     # ---- Hyperparameter Tuning Info ----

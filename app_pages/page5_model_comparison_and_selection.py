@@ -20,8 +20,7 @@ def page_model_comparison_and_selection_body():
 
     # ---- Load Model Comparison Data ----
     model_comparison_df = pd.read_csv(
-        "/workspaces/Heart_disease_risk_predictor/outputs/models/"
-        "final_results.csv"
+        "outputs/models/final_results.csv"
     )
     model_comparison_df.columns = (
         model_comparison_df.columns.str.lower().str.replace("-", "_")
