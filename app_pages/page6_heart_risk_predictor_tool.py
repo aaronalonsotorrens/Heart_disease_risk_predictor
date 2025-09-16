@@ -16,8 +16,7 @@ def page_heart_risk_predictor_tool_body():
         (
             "Input patient clinical data to predict heart disease risk "
             "using the best trained model. The tool returns predicted "
-            "class, probability, risk band, recommendations, and top "
-            "contributing features."
+            "class, probability, risk band and recommendations."
         )
     )
 

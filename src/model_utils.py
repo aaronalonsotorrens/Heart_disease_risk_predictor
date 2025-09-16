@@ -132,26 +132,3 @@ def enhanced_predict(pipeline, df: pd.DataFrame):
         risk_band = "Very High"
         recommendation = "Immediate medical attention recommended."
 
-    # Optional: top contributing features
-    try:
-        import shap
-
-        explainer = shap.Explainer(pipeline.named_steps["classifier"])
-        shap_values = explainer(df)
-        top_contrib = (
-            pd.DataFrame(
-                {"Feature": df.columns, "Contribution": shap_values.values[0]}
-            )
-            .sort_values("Contribution", key=abs, ascending=False)
-            .head(5)
-        )
-    except Exception:
-        top_contrib = None
-
-    return {
-        "Prediction": pred,
-        "Probability": round(prob, 3),
-        "Risk Band": risk_band,
-        "Recommendation": recommendation,
-        "Top Contributions": top_contrib,
-    }
