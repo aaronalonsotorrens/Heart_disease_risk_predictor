@@ -11,13 +11,13 @@ def load_pipeline(path: str):
 
 
 def preprocess_input(df: pd.DataFrame, pipeline) -> pd.DataFrame:
-    """Create engineered features, perform necessary one-hot encodings and align
-    input columns with the pipeline's expected feature names.
+    """
+    Create engineered features, perform one-hot encodings, and align input 
+    columns with the pipeline's expected feature names.
 
-
-    This function is defensive: it only creates features when the source
-    columns exist and fills missing expected columns with zeros so the
-    pipeline receives the exact schema it expects.
+    This function is defensive: it only creates features when the source 
+    columns exist. Any missing expected columns are filled with zeros so 
+    that the pipeline receives the exact schema it expects.
     """
     df = df.copy()
 
@@ -95,7 +95,7 @@ def preprocess_input(df: pd.DataFrame, pipeline) -> pd.DataFrame:
 
     for col in pipeline_features:
         if col not in df.columns:
-            # fill missing columns with 0 so the pipeline receives a complete schema
+            # fill missing columns with 0 so the pipeline receives a schema
             df[col] = 0
 
     # Reorder and return only the features the pipeline expects
@@ -108,7 +108,11 @@ def enhanced_predict(pipeline, df: pd.DataFrame):
     """
     Make predictions for heart disease risk with enhanced output.
 
-    Returns a dictionary with Prediction, Probability, Risk Band, Recommendation.
+    Returns a dictionary with the following keys:
+    - Prediction
+    - Probability
+    - Risk Band
+    - Recommendation
     """
     prob = pipeline.predict_proba(df)[:, 1][0]
     pred = int(prob >= 0.5)
