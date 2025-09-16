@@ -40,6 +40,7 @@ def load_data(path: str):
     """
     return pd.read_csv(path)
 
+
 data_path = (
     "outputs/datasets/cleaned/heart_disease_cleaned.csv"
 )

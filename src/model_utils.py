@@ -131,4 +131,3 @@ def enhanced_predict(pipeline, df: pd.DataFrame):
     else:
         risk_band = "Very High"
         recommendation = "Immediate medical attention recommended."
-

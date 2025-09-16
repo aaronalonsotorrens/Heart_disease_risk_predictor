@@ -1,6 +1,6 @@
 # 🫀 Heart Disease Risk Predictor
 
-## 1. Project Overview
+## Project Overview
 
 The **Heart Disease Risk Predictor** is a data-driven project designed to predict the likelihood of heart disease in patients based on clinical and demographic features. This tool is intended to support **public health workers, clinicians, and healthcare stakeholders** in identifying high-risk individuals early, enabling preventative interventions and informed decision-making.
 
@@ -11,9 +11,11 @@ The **Heart Disease Risk Predictor** is a data-driven project designed to predic
 - Develop a reusable workflow for preprocessing, modeling, and evaluation.
 - Prepare for eventual deployment in an interactive dashboard for real-time predictions.
 
+![app image](readme-docs/app_image.png)
+
 ---
 
-## 2. Business Context & Case
+## Business Context & Case
 
 Heart disease remains one of the leading causes of morbidity and mortality worldwide. Early detection of high-risk patients can significantly reduce complications and healthcare costs.  
 
@@ -28,7 +30,6 @@ Heart disease remains one of the leading causes of morbidity and mortality world
 
 - Achieve **≥80% accuracy** on classification tasks.
 - Maintain **high recall** to minimize false negatives.
-- Ensure explainability using feature importance and SHAP/LIME.
 - Maintain clean, documented, and reusable code pipelines.
 
 **ML Tasks Mapped to Business Case:**
@@ -69,7 +70,7 @@ Each business requirement was mapped to a specific analysis and ML task:
 
 ---
 
-ML Business Case
+## ML Business Case
 
 The client is interested in moving beyond descriptive analysis to **predictive analytics**:
 
@@ -119,7 +120,7 @@ C → Could have (nice-to-have, “if time allows”)
 | [M] | As a machine learning engineer, I want to train baseline models (Logistic Regression, Random Forest) so that I can compare performance and select a strong candidate. |
 | [M] | As a machine learning engineer, I want to perform hyperparameter tuning with cross-validation so that I can improve model accuracy and reduce overfitting. |
 | [M] | As a machine learning engineer, I want to track model performance metrics (accuracy, ROC-AUC, recall, precision) so that I can ensure the model meets the 80% accuracy target and low false negatives. |
-| [S/C] | As a machine learning engineer, I want to use SHAP or LIME for explainability so that stakeholders understand how the model makes predictions. (Should have, but becomes Could have if time is tight) |
+| [C] | As a machine learning engineer, I want to use SHAP or LIME for explainability so that stakeholders understand how the model makes predictions. (Should have, but becomes Could have if time is tight) |
 
 ### Epic 4 – Dashboard Planning, Designing & Development
 
@@ -236,33 +237,33 @@ Dataset loaded, cleaned of major inconsistencies, and ready for deeper preproces
 ### Notebook 2 — Data Preprocessing & Feature Engineering
 
 **Purpose:**  
-Transform raw data into a machine-learning-ready format.
-
-**Key Features:**
-
-- Handle missing values using median/mode imputation.
-- Encode categorical variables (one-hot or binary encoding).
-- Scale numeric features to standardize magnitude.
-- Engineer new features (e.g., age groups, cholesterol ratios, interaction terms).
-- Detect and treat outliers to reduce bias.
-
-**Outcome:**  
-Cleaned, numeric, fully-preprocessed dataset saved for model training.
-
-### Notebook 3 — Exploratory Data Analysis (EDA) & Feature Selection
-
-**Purpose:**  
 Understand feature distributions, relationships, and importance before modeling.
 
 **Key Features:**
 
 - Visualize distributions and correlations.
-- Identify predictive features via statistical tests and domain knowledge.
+- Identify predictive features.
 - Examine multicollinearity to reduce redundancy.
 - Rank features by relevance for candidate models.
 
 **Outcome:**  
 Informed selection of features for model training, ensuring interpretability and predictive power.
+
+### Notebook 3 — Exploratory Data Analysis (EDA) & Feature Selection
+
+**Purpose:**  
+Transform raw data into a machine-learning-ready format.
+
+**Key Features:**
+
+- Handle missing values.
+- Encode categorical variables (one-hot or binary encoding).
+- Scale numeric features to standardize magnitude.
+- Engineer new features (e.g., age groups, cholesterol ratios, interaction terms).
+- Detect and treat outliers to reduce bias.
+
+**Outcome:**
+Cleaned, numeric, fully-preprocessed dataset saved for model training.  
 
 ### Notebook 4 — Model Training & Baseline Performance
 
@@ -289,7 +290,6 @@ Optimize model performance using systematic tuning and cross-validation.
 - GridSearchCV or randomized search for hyperparameter optimization.
 - Cross-validation to ensure robust performance estimates.
 - Compare tuned models across metrics and select top performers.
-- Optional experiments: feature subset selection, engineered feature impact.
 
 **Outcome:**  
 Tuned models ready for final evaluation, with improved generalization over baseline.
@@ -332,7 +332,7 @@ Pipeline ready for API/web integration; interpretable and actionable predictions
 
 ### Classification Model — Heart Disease Risk
 
-We aim to develop a **machine learning model to predict the likelihood of heart disease** in patients based on clinical and demographic features. The target variable is **categorical** and contains **2 classes**:
+We aim to develop a machine learning model to predict the likelihood of heart disease in patients based on clinical and demographic features. The target variable is **categorical** and contains **2 classes**:
 
 - `0` = No heart disease  
 - `1` = Presence of heart disease  
@@ -349,8 +349,8 @@ Provide healthcare practitioners and public health stakeholders with reliable in
 
 **Failure Criteria:**
 
-- If more than 30% of high-risk patients are misclassified as low-risk over a follow-up period (indicating poor clinical utility).  
-- If precision for low-risk patients falls below 80%, leading to unnecessary interventions.
+- If F1 for heart disease (1) < 0.8, the model risks misidentifying high-risk patients.
+- If Accuracy for non-heart disease (0) < 0.8, the model may produce too many false alarms or unnecessary concern.
 
 ### Model Output
 
@@ -364,14 +364,9 @@ Provide healthcare practitioners and public health stakeholders with reliable in
 
 **Inference:** Predictions are generated **on the fly**, not in batch mode.
 
-### Heuristics
-
-- No prior approach exists for predicting heart disease risk in a single-step ML pipeline with interpretable results for clinical use.
-
 ### Training Data
 
 - Source: UCI Heart Disease dataset via Kaggle (~1,000 patient records).  
-- Target: `target` (heart disease presence).  
 - Features: Clinical and demographic variables, excluding identifiers.  
 - Preprocessing includes handling missing values, categorical encoding, feature scaling, and engineered features such as cholesterol ratios and age groups.
 
@@ -379,18 +374,13 @@ Provide healthcare practitioners and public health stakeholders with reliable in
 
 1. **Baseline Models:** Logistic Regression, Random Forest, XGBoost, LightGBM.  
 2. **Tuning:** Hyperparameter optimization using GridSearchCV and cross-validation.  
-3. **Evaluation Metrics:** Accuracy, Precision, Recall, F1-score, ROC-AUC.  
-4. **Feature Analysis:** Importance ranking and optional SHAP/LIME explanations.  
+3. **Evaluation Metrics:** Accuracy, Precision, Recall, F1-score, ROC-AUC.
+4. **Multi-class Risk Band Classification:** Patients can be categorized into `Low`, `Medium`, or `High` risk based on predicted probability thresholds.
 5. **Deployment:** Saved pipeline enables real-time inference in web or API-based applications.
-
-### Optional Extensions
-
-- **Multi-class Risk Band Classification:** Patients can be categorized into `Low`, `Medium`, or `High` risk based on predicted probability thresholds.  
-- **Feature Contribution Reporting:** Top contributing variables for each prediction are returned to enhance clinical interpretability.
 
 ---
 
-## Heart Disease Prediction Dashboard
+## Dashboard - Heart Disease Prediction Tool
 
 ### Overview
 
@@ -400,29 +390,30 @@ This Streamlit dashboard predicts heart disease risk using clinical patient data
 
 ### Dashboard pages
 
-    1. **📌 Project Overview & Goals**
-       - Quick project summary, dataset description, and business requirements.
-       - Understand the purpose of the project and key predictive modeling goals.
-    
-    2. **📊 Data Exploration & Insights**
-       - Exploratory Data Analysis (EDA) including distributions, correlations, and multivariate relationships.
-       - Guides feature selection and model preparation.
-    
-    3. **⚙️ Model Development & Evaluation**
-       - Train multiple machine learning models (Logistic Regression, Random Forest, XGBoost, LightGBM).
-       - Compare performance metrics: Accuracy, F1-score, ROC-AUC.
-    
-    4. **🔧 Model Tuning & Insights**
-       - Evaluate feature contributions via ablation studies.
-       - Display confusion matrices, ROC curves, and feature importance.
-    
-    5. **📈 Model Comparison & Selection**
-       - Compare tuned models on holdout test set.
-       - Select the best-performing model for deployment.
-    
-    6. **🩺 Heart Risk Predictor Tool**
-       - Real-time patient risk prediction using core and advanced clinical features.
-       - Outputs risk probability, predicted class, risk band, clinical recommendations, and feature contributions.
+1. **📌 Project Overview & Goals**
+
+     - Quick project summary, dataset description, and business requirements.
+     - Understand the purpose of the project and key predictive modeling goals.
+  
+2. **📊 Data Exploration & Insights**
+     - Exploratory Data Analysis (EDA) including distributions, correlations, and multivariate relationships.
+     - Guides feature selection and model preparation.
+
+3. **⚙️ Model Development & Evaluation**
+     - Train multiple machine learning models (Logistic Regression, Random Forest, XGBoost, LightGBM).
+     - Compare performance metrics: Accuracy, F1-score, ROC-AUC.
+
+4. **🔧 Model Tuning & Insights**
+     - Evaluate feature contributions via ablation studies.
+     - Display confusion matrices, ROC curves, and feature importance.
+
+5. **📈 Model Comparison & Selection**
+     - Compare tuned models on holdout test set.
+     - Select the best-performing model for deployment.
+
+6. **🩺 Heart Risk Predictor Tool**
+     - Real-time patient risk prediction using core and advanced clinical features.
+     - Outputs risk probability, predicted class, risk band, clinical recommendations, and feature contributions.
 
 ### Multiple pages
 
@@ -430,10 +421,12 @@ This Streamlit dashboard predicts heart disease risk using clinical patient data
 
 ### Page 1: Quick Project Summary
 
-**Before the analysis:**  
-We intended this page to provide a high-level summary of the project to new users and stakeholders.  
+**Before the analysis:**
+
+I intended this page to provide a high-level summary of the project to new users and stakeholders.  
 
 **After the analysis:**  
+
 The page provides:
 
 - Quick project summary
@@ -444,7 +437,8 @@ The page provides:
   - Identify high-risk patients
   - Provide actionable clinical recommendations
 
-**Outcome:**  
+**Outcome:**
+
 Users understand the purpose of the project, the data being used, and the key goals for predictive modeling.
 
 ### Project overview
@@ -457,10 +451,12 @@ Users understand the purpose of the project, the data being used, and the key go
 
 ### Page 2: Exploratory Data Analysis (EDA)
 
-**Before the analysis:**  
-We aimed to answer: “Which clinical variables are associated with heart disease?”  
+**Before the analysis:**
 
-**After the analysis:**  
+I aimed to answer: “Which clinical variables are associated with heart disease?”  
+
+**After the analysis:**
+
 The page provides:
 
 - Checkbox: Inspect dataset (rows, columns, first 10 records)
@@ -468,7 +464,8 @@ The page provides:
 - Individual plots showing distribution of key features (e.g., age, cholesterol, max heart rate)
 - Parallel plots to examine multivariate relationships
 
-**Outcome:**  
+**Outcome:**
+
 Insights guide feature selection and inform the ML models.
 
 ### EDA features
@@ -489,17 +486,20 @@ Insights guide feature selection and inform the ML models.
 
 ### Page 3: Model Development and Evaluation
 
-**Before the analysis:**  
-We planned to train several machine learning models and compare performance metrics.  
+**Before the analysis:**
 
-**After the analysis:**  
+I planned to train several machine learning models and compare performance metrics.  
+
+**After the analysis:**
+
 The page provides:
 
 - ML pipeline steps for each model (Logistic Regression, Random Forest, XGBoost, LightGBM)
 - Performance metrics: Accuracy, F1, ROC-AUC
 - Observations and considerations after training
 
-**Outcome:**  
+**Outcome:**
+
 Identifies the best-performing models for further evaluation.
 
 ### Model Development
@@ -512,10 +512,12 @@ Identifies the best-performing models for further evaluation.
 
 ### Page 4: Model Tuning and Insights
 
-**Before the analysis:**  
-We wanted to assess the contribution of each feature and verify the impact of engineered features.  
+**Before the analysis:**
 
-**After the analysis:**  
+I wanted to assess the contribution of each feature and verify the impact of engineered features.  
+
+**After the analysis:**
+
 The page provides:
 
 - Tuned model performance comparison
@@ -523,7 +525,8 @@ The page provides:
 - Tree-based feature importance (Random Forest, XGBoost, LightGBM)
 - Dynamic notes explaining model-specific observations
 
-**Outcome:**  
+**Outcome:**
+
 Users see which features are most influential and validate feature engineering.
 
 ### Tuned Models
@@ -536,10 +539,12 @@ Users see which features are most influential and validate feature engineering.
 
 ### Page 5: Model Comparison and Selection
 
-**Before the analysis:**  
+**Before the analysis:**
+
 Goal: Compare tuned models on a holdout test set to select the best-performing pipeline.  
 
-**After the analysis:**  
+**After the analysis:**
+
 The page provides:
 
 - Comparative performance metrics on the holdout test set
@@ -547,7 +552,8 @@ The page provides:
 - Barplots visualizing metrics across models
 - Actionable insights for deployment
 
-**Outcome:**  
+**Outcome:**
+
 Provides confidence in the final model pipeline for real-world deployment.
 
 ### Best Model Selection
@@ -556,16 +562,18 @@ Provides confidence in the final model pipeline for real-world deployment.
 
 ### Page 6: Inference Tool (Core Patient Prediction)
 
-**Before the analysis:**  
-We wanted a page that allows quick, actionable predictions for typical users while also providing an option to explore advanced inputs for extreme or high-risk cases.
+**Before the analysis:**
 
-**After the analysis:**  
+I wanted a page that allows quick, actionable predictions for typical users while also providing an option to explore advanced inputs for extreme or high-risk cases.
+
+**After the analysis:**
+
 The page provides:
 
 - **Simple Input Section** for core clinical features:
   - Age, sex, chest pain type, blood pressure, cholesterol, max heart rate, ST depression, exercise-induced angina, slope, major vessels, thalassemia
   - “Run Prediction” button
-  - Outputs: predicted class, probability, risk band, clinical recommendation, top contributing features (via SHAP if available)
+  - Outputs: predicted class, probability, risk band and clinical recommendation
 - **Optional Advanced Input Section** (expandable):
   - All 22 features including engineered variables (`chol_age_ratio`, `oldpeak_thalach_ratio`, etc.)
   - Dataset placeholders for source tracking
@@ -598,17 +606,7 @@ The page provides:
 
 ## Data Flow/Model Overview
 
-Patient Input (clinical + demographic features)
-          ↓
-   Preprocessing Pipeline
-   (missing value imputation, encoding, scaling, feature engineering)
-          ↓
-   ML Model (Logistic Regression / Random Forest / XGBoost)
-          ↓
-  Prediction Output:
-    - Class (0/1)
-    - Probability
-    - Risk Band
+![Data flow](readme-docs/data_flow_image.png)
 
 ---
 
@@ -644,17 +642,31 @@ Wireframes were created in Uiwizard. They were used for initial planning of temp
 
 ### Dashboard wireframe
 
-![wireframe](readme-docs/wireframe_dashboard)
+![wireframe](readme-docs/wireframe_dashboard.png)
 
 ### Predictive tool wireframe
 
-![wireframe](readme-docs/wireframe_dashboard)
+![wireframe](readme-docs/wireframe_dashboard.png)
 
 ---
 
 ## Agile Methodology
 
 GitHub Projects was used in part for the planning of this website to create and track User Stories as they were implemented and fulfilled.
+
+### Github User Story Board
+
+![Agile plan document](readme-docs/user_story_board.png)
+
+### Github User Story Board Example
+
+![Agile plan document](readme-docs/user_story_board_example.png)
+
+### Kanban board setting to public
+
+![Agile plan document](readme-docs/user_story_accesibility.png)
+
+</details>
 
 ---
 
@@ -666,11 +678,11 @@ The project was tested for pep8 compliance using pycodestyle.
 
 ### App_pages python code test
 
-![testing](readme-docs/pycodestyle_app_pages)
+![testing](readme-docs/pycodestyle_app_pages.png)
 
 ### Python code across files
 
-![testing](readme-docs/pycodestyle_python_code)
+![testing](readme-docs/pycodestyle_python_code.png)
 
 ### Automated Testing
 
@@ -678,11 +690,11 @@ Below the steps for manual testing of the site have been arranged into tables.
 
 ### Manual testing
 
-![testing](readme-docs/manual_testing)
+![testing](readme-docs/manual_testing.png)
 
 ### User story testing
 
-![testing](readme-docs/user_story_testing)
+![testing](readme-docs/user_story_testing.png)
 
 ---
 
@@ -696,23 +708,24 @@ The website was tested on:
 
 ---
 
-## Summary of Technologies Included
+## Technologies Used
 
-- Python: Core language for preprocessing, ML, and analysis.
-
-- Pandas / NumPy: Data manipulation.
-
-- Matplotlib / Seaborn / Plotly: Data visualization and interactive plots.
-
-- Scikit-learn: Baseline ML models, preprocessing, metrics.
-
-- XGBoost / LightGBM: Advanced gradient boosting models.
-
-- Streamlit: Dashboard interface.
-
-- Kaggle / UCI ML Repository: Data sources.
-
-- Git: Version control.
+- **[Python 3](https://www.python.org/)** – Core programming language for data preprocessing, modeling, and deployment.  
+- **[Pandas](https://pandas.pydata.org/)** – For data manipulation and preparation.  
+- **[NumPy](https://numpy.org/)** – For numerical computing and efficient array operations.  
+- **[Matplotlib](https://matplotlib.org/)** – For static visualizations.  
+- **[Seaborn](https://seaborn.pydata.org/)** – For statistical data visualization and correlation analysis.  
+- **[Plotly](https://plotly.com/)** – For interactive charts in the dashboard.  
+- **[Scikit-learn](https://scikit-learn.org/stable/)** – For preprocessing, baseline ML models, and evaluation metrics.  
+- **[XGBoost](https://xgboost.readthedocs.io/)** – Gradient boosting framework for advanced classification models.  
+- **[LightGBM](https://lightgbm.readthedocs.io/)** – Gradient boosting library optimized for speed and efficiency.  
+- **[Streamlit](https://streamlit.io/)** – For building the interactive prediction dashboard.  
+- **[Heroku](https://www.heroku.com/)** – For deployment of the Streamlit app.  
+- **[Git](https://git-scm.com/)** – Version control for project tracking and collaboration.  
+- **[GitHub](https://github.com/)** – Hosting the project repository.  
+- **[Uiwizard](https://uizard.io/)** – Used for wireframe design and layout planning.  
+- **[Pycodestyle](https://pycodestyle.pycqa.org/)** – For PEP8 compliance and code quality checks.  
+- **[Jupyter Notebooks](https://jupyter.org/)** – For iterative development, experimentation, and presenting workflows.
 
 ---
 
@@ -723,3 +736,83 @@ At the time of submission, no known unfixed bugs remain.
 - All pages of the Streamlit dashboard run without errors.
 - Model pipelines load successfully for inference.  
 - If future issues arise during deployment, they will be documented here.
+
+---
+
+## Deployment
+
+You can deploy this Streamlit app on Heroku by following these steps:
+
+- Create setup.sh
+
+Create a file named setup.sh in the project root with the following content:
+
+mkdir -p ~/.streamlit/
+
+echo "\
+[server]\n\
+headless = true\n\
+port = \$PORT\n\
+enableCORS = false\n\
+\n\
+" > ~/.streamlit/config.toml
+
+- Create a Procfile
+
+Create a file named Procfile (no extension) in the project root:
+
+web: sh setup.sh && streamlit run app.py
+
+This tells Heroku how to start your app.
+
+- Deploy to Heroku
+
+  - Login to Heroku (or create an account if needed):
+
+  - heroku login
+
+  - Create a new app:
+
+    - Go to your Heroku Dashboard
+
+    - Click Create New App.
+
+    - Enter a unique name for your app and select your preferred region.
+
+    - Click Create App.
+
+  - Go to deploy
+
+- Connect your GitHub repository:
+
+  - In your app’s Heroku dashboard, go to the Deploy tab.
+
+  - Under Deployment method, choose GitHub and connect your repo.
+
+  - Select the branch you want to deploy (usually main).
+
+- Deploy the app:
+
+  - Click Deploy Branch.
+
+  - Once the build finishes, click View or go to the Open App button at the top-right of the dashboard.
+
+Your Streamlit app should now be live!
+
+---
+
+## Acknowledgements
+
+I would like to extend my gratitude to the following for their support and resources, throughout the development of this project:
+
+- **[Kaggle](https://www.kaggle.com/)** – For providing access to the Heart Disease dataset used for model training and evaluation.  
+- **[Scikit-learn Documentation](https://scikit-learn.org/stable/)** – For clear guidance on preprocessing, model building, and evaluation metrics.  
+- **[XGBoost Documentation](https://xgboost.readthedocs.io/)** and **[LightGBM Documentation](https://lightgbm.readthedocs.io/)** – For detailed references on gradient boosting methods applied in this project.  
+- **[Streamlit Documentation](https://docs.streamlit.io/)** – For enabling the development of an accessible, interactive dashboard.  
+- **[Matplotlib](https://matplotlib.org/)**, **[Seaborn](https://seaborn.pydata.org/)**, and **[Plotly](https://plotly.com/)** – For providing powerful tools for visualizing data and model insights.  
+- **[Stack Overflow](https://stackoverflow.com/)** – For being a go-to resource when troubleshooting technical challenges.  
+- **[W3Schools](https://www.w3schools.com/)** and **[MDN Web Docs](https://developer.mozilla.org/)** – For clear explanations of Python, data handling, and general programming concepts.  
+- **[ChatGPT](https://chat.openai.com/)** – For guidance with project planning, documentation structuring, and troubleshooting.  
+- **[Uiwizard](https://uizard.io/)** – For wireframing and planning dashboard layouts.  
+
+A special thank you goes to my mentor Can Sucullu and CodeInstitute for their constructive feedback and encouragement, which helped refine both the technical and presentation aspects of this project.
