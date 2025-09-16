@@ -16,7 +16,8 @@ def load_pipeline(path: str):
         return joblib.load(path)
 
     # If running on Heroku, replace /workspaces/... with /app
-    heroku_path = path.replace("/workspaces/Heart_disease_risk_predictor", "/app")
+    heroku_path = path.replace("/workspaces/Heart_disease_risk_predictor",
+                                "/app")
     if os.path.exists(heroku_path):
         return joblib.load(heroku_path)
 
