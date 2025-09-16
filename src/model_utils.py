@@ -12,11 +12,11 @@ def load_pipeline(path: str):
 
 def preprocess_input(df: pd.DataFrame, pipeline) -> pd.DataFrame:
     """
-    Create engineered features, perform one-hot encodings, and align input 
+    Create engineered features, perform one-hot encodings, and align input
     columns with the pipeline's expected feature names.
 
-    This function is defensive: it only creates features when the source 
-    columns exist. Any missing expected columns are filled with zeros so 
+    This function is defensive: it only creates features when the source
+    columns exist. Any missing expected columns are filled with zeros so
     that the pipeline receives the exact schema it expects.
     """
     df = df.copy()
