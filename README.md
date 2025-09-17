@@ -13,7 +13,8 @@ The **Heart Disease Risk Predictor** is a data-driven project designed to predic
 
 ![app image](readme-docs/app_image.png)
 
-The live site can be found here: [Heart Disease Risk Predictor](https://project-5-heart-risk-predictor-427e46733288.herokuapp.com/)
+**Live site:** [Heart Disease Risk Predictor](https://project-5-heart-risk-predictor-427e46733288.herokuapp.com/)  
+**Dataset:** [UCI Heart Disease dataset on Kaggle](https://www.kaggle.com/datasets/redwankarimsony/heart-disease-data)
 
 ---
 
