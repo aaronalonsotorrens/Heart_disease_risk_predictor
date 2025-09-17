@@ -196,8 +196,8 @@ def page_heart_risk_predictor_tool_body():
         result = enhanced_predict(pipeline_best, processed_data)
 
         pred_label = (
-            "No Heart Disease (0)" 
-            if result['Prediction'] == 0 
+            "No Heart Disease (0)"
+            if result['Prediction'] == 0
             else "Heart Disease Risk (1)"
         )
 
@@ -227,7 +227,7 @@ def page_heart_risk_predictor_tool_body():
         expanded=st.session_state.adv_expander_open
     ):
         st.warning(
-            "Manually set all features. Use with caution for testing " 
+            "Manually set all features. Use with caution for testing "
             "extreme/high-risk patients."
         )
         # ---- Core Clinical Features (same style as simple version) ----
@@ -398,13 +398,13 @@ def page_heart_risk_predictor_tool_body():
 
         # Prediction button
         if st.button("Run Full Advanced Prediction"):
-            st.session_state.adv_expander_open = True 
+            st.session_state.adv_expander_open = True
             processed_data = preprocess_input(full_patient, pipeline_best)
             result = enhanced_predict(pipeline_best, processed_data)
 
             pred_label = (
-                "No Heart Disease (0)" 
-                if result['Prediction'] == 0 
+                "No Heart Disease (0)"
+                if result['Prediction'] == 0
                 else "Heart Disease Risk (1)"
             )
 
