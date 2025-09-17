@@ -13,6 +13,8 @@ The **Heart Disease Risk Predictor** is a data-driven project designed to predic
 
 ![app image](readme-docs/app_image.png)
 
+The live site can be found here: [Heart Disease Risk Predictor](https://project-5-heart-risk-predictor-427e46733288.herokuapp.com/)
+
 ---
 
 ## Business Context & Case
@@ -170,7 +172,6 @@ Each row represents a patient, and each column represents a clinical or demograp
 
 - **Patient:** Individual under clinical evaluation.  
 - **Feature / Variable:** An attribute measured for each patient.  
-- **Target:** The outcome variable to be predicted (`target`).  
 - **Risk Factor:** A feature correlated with the presence of heart disease.  
 - **Prospect Patient:** A new patient whose heart disease risk is unknown.  
 
