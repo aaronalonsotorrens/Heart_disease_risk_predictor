@@ -17,8 +17,30 @@ def page_project_overview_and_goals_body(data: pd.DataFrame):
         "healthcare costs."
     )
 
+    # ---- Client Requirements ----
+    st.subheader("🎯 Client Requirements")
+    st.write(
+        "- Provide a dashboard for clinicians to explore "
+        "heart disease risk factors.\n"
+        "- Deliver predictive ML model(s) to identify high-risk patients.\n"
+        "- Include interpretability so clinicians understand key features.\n"
+        "- Provide actionable recommendations for patient monitoring "
+        "and prevention."
+    )
+    st.subheader("💡 Project Hypotheses")
+    st.write(
+        "**Hypothesis 1 (Analytics-driven):** Certain clinical "
+        "features such as age, "
+        "cholesterol, resting blood pressure, and chest pain type are "
+        "significantly associated with heart disease.\n\n"
+        "**Hypothesis 2 (ML-driven):** A machine learning model using "
+        "these clinical "
+        "features can accurately predict heart disease risk with "
+        "ROC-AUC ≥ 0.80 and F1 ≥ 0.80."
+    )
+
     # ---- So What: Dataset Summary & Insights ----
-    st.markdown("### So What: Dataset Summary & Insights")
+    st.markdown("### Dataset Summary & Insights")
 
     # Key dataset metrics (KPIs)
     total_patients = data.shape[0]

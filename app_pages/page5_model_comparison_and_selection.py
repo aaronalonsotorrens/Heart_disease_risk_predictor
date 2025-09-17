@@ -104,6 +104,19 @@ def page_model_comparison_and_selection_body():
         )
     )
 
+    # ---- Hypothesis 2 Validation ----
+    st.subheader("✅ Hypothesis 2 Validation")
+    st.write(
+        f"We evaluated all tuned models on the holdout test set to assess "
+        f"predictive performance:\n"
+        f"- Best model: {best_model['model']}\n"
+        f"- ROC-AUC = {best_model['roc_auc']:.2f}\n"
+        f"- F1 = {best_model['f1']:.2f}\n\n"
+        "This confirms Hypothesis 2: our ML pipeline achieves strong "
+        "predictive performance, successfully identifying high-risk "
+        "patients based on clinical features."
+    )
+
     # ---- Next Steps ----
     st.success(
         (

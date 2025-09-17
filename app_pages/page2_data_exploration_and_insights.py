@@ -191,19 +191,28 @@ def page_data_exploration_and_insights_body(data: pd.DataFrame):
             "miss."
         )
 
-    # ---- Takeaway ----
+    # ---- Hypothesis 1 Validation ----
+    st.subheader("🔍 Hypothesis 1 Validation")
+    st.write(
+        "Analysis of feature distributions, correlations, and interactions "
+        "indicates:\n"
+        "- Age, cholesterol, resting BP, and chest pain type differ "
+        "noticeably between patients with and without heart disease.\n"
+        "- Correlations with Heart Disease are moderate-to-strong for several "
+        "numeric features.\n"
+        "- Observed patterns support Hypothesis 1: key clinical features are "
+        "associated with heart disease outcomes."
+    )
+
+    # ---- Key Takeaways (Forward-looking) ----
     st.success(
-        "### 🧾 EDA Takeaways\n"
-        "- **Feature Distributions** reveal which variables differ most "
-        "between patients with and without heart disease. This helps "
-        "identify candidate risk factors.\n"
-        "- **Correlation Analysis** highlights linear relationships and "
-        "helps us prioritize features for training.\n"
-        "- **Interactive Exploration** uncovers interactions between "
-        "features that may be more predictive together than alone.\n\n"
-        "➡️ These insights guide **feature engineering**, **model "
-        "selection**, and ultimately improve the predictive power of our "
-        "models. For example, strong predictors (like chest pain type or "
-        "exercise-induced angina) will be emphasized in training, while "
-        "weak or redundant variables may be dropped."
+        "### 🧾 Key Takeaways & Next Steps\n"
+        "- Focus on features with strong associations (e.g., chest pain type, "
+        "exercise-induced angina) for model training.\n"
+        "- Consider interactions between features (e.g., cholesterol and "
+        "blood pressure) in feature engineering.\n"
+        "- Weak or redundant variables may be excluded to reduce noise and "
+        "improve model performance.\n"
+        "- Insights from EDA guide subsequent predictive modeling to test "
+        "Hypothesis 2."
     )
