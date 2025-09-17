@@ -211,11 +211,14 @@ def page_heart_risk_predictor_tool_body():
     st.info(
         (
             "ℹ️ **Model Input Explanation:**\n\n"
-            "Default features focus on core clinical variables. "
-            "Designed to flag patients needing attention (risk ~50%).\n\n"
-            "For precise assessment, enable **Advanced Input**. "
-            "Includes all features for improved prediction and probability "
-            "resolution."
+            "The default input fields focus on core clinical variables and "
+            "provide reliable predictions for typical patients.\n"
+            "This setup has been designed for simplicity and a better "
+            "user experience.\n\n"
+            "For potentially higher-resolution predictions or to test "
+            " extreme/high-risk combinations, enable "
+            "the **Advanced Input** section.\n"
+            "This section includes all features used by the model."
         )
     )
     # ---- Fully Advanced Input (All 22 features) ----
