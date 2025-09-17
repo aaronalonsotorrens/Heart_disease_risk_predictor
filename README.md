@@ -37,8 +37,6 @@ Heart disease remains one of the leading causes of morbidity and mortality world
 **ML Tasks Mapped to Business Case:**
 
 - **Classification:** Predict whether a patient is at risk (`HeartDisease` 0/1).
-- **Regression (Optional):** Estimate a risk score or severity index.
-- **Clustering (Optional):** Group patients with similar profiles for population-level insights.
 
 ---
 
